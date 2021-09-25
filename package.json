@@ -1,0 +1,94 @@
+{
+  "name": "wdio-cucumberjs-json-reporter",
+  "version": "4.1.0",
+  "description": "A WDIO reporter that creates CucumberJS JSON files for WebdriverIO V5+",
+  "main": "./dist/reporter.js",
+  "types": "./dist/reporter.d.ts",
+  "scripts": {
+    "build": "npm run-script clean && tsc",
+    "clean": "rimraf coverage dist .tmp",
+    "compile": "npm run-script clean && tsc",
+    "test.lint": "eslint lib",
+    "test": "jest --coverage",
+    "precompile": "npm run clean",
+    "prerelease": "npm run compile",
+    "prepublish": "npm run compile",
+    "release": "release-it --github.release",
+    "release:ci": "npm run release -- --ci --npm.skipChecks --no-git.requireCleanWorkingDir",
+    "release:patch": "npm run release -- patch",
+    "release:minor": "npm run release -- minor",
+    "release:major": "npm run release -- major",
+    "watch": "npm run compile -- --watch",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "update-package-json-dependencies": "npx ncu -u && npm i",
+    "eslint-fix-all": "npx eslint lib/**/**/*.ts lib/**/*.ts lib/*.ts --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webdriverio-community/wdio-cucumberjs-json-reporter.git"
+  },
+  "keywords": [
+    "cucumberjs",
+    "reporter",
+    "report",
+    "webdriverio",
+    "wdio",
+    "wdio-reporter"
+  ],
+  "author": "Wim Selles <wim@wswebcreation.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webdriverio-community/wdio-cucumberjs-json-reporter/issues"
+  },
+  "homepage": "https://github.com/webdriverio-community/wdio-cucumberjs-json-reporter#readme",
+  "dependencies": {
+    "@cucumber/gherkin": "~21.0.0",
+    "@wdio/logger": "~7.7.0",
+    "@wdio/reporter": "^7.12.5",
+    "fs-extra": "~10.0.0"
+  },
+  "peerDependencies": {
+    "@wdio/cucumber-framework": "~7.12.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.9",
+    "@types/fs-extra": "^9.0.12",
+    "@types/jest": "^27.0.2",
+    "@types/long": "^4.0.1",
+    "@types/node": "^15.14.3",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
+    "@wdio/cucumber-framework": "~7.12.5",
+    "@wdio/sync": "^7.12.5",
+    "@wdio/types": "^7.12.5",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-transform-function-bind": "^6.22.0",
+    "coveralls": "^3.1.1",
+    "cucumber-html-report-generator": "0.0.9",
+    "cucumber-messages": "^8.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsdoc": "^36.1.0",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-tslint": "^3.1.0",
+    "husky": "^7.0.2",
+    "jest": "^27.2.1",
+    "npm-check-updates": "^11.8.5",
+    "release-it": "^14.11.5",
+    "rimraf": "^3.0.2",
+    "strip-ansi": "^6.0.0",
+    "ts-jest": "^27.0.5",
+    "tslint": "^6.1.3",
+    "typescript": "^4.4.3",
+    "webdriverio": "^7.12.5",
+    "yargs": "^17.1.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run test.lint && npm run test"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    // "**/dist": true,
+    "**/coverage": true,
+    "**/.nyc_output": true,
+    "**/reports": true,
+  },
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.formatOnSave": false,
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    // "source.sortImports": true
+  },
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "mochaExplorer.files": "test/unit/**/*.ts",
+  "mochaExplorer.require": [
+    // "source-map-support/register",
+    // "ts-node/register/transpile-only",
+    // "tsconfig-paths/register"
+  ],
+  // "mochaExplorer.env": {
+  //   "TS_NODE_FILES": "true"
+  // },
+  // "mochaExplorer.debuggerConfig": "DebugMochaTestsOriginal",
+  // "mochaExplorer.optsFile": "test/mocha.ops",
+  // "prettier.bracketSpacing": true,
+  "mochaExplorer.logpanel": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "cucumberautocomplete.strictGherkinValidation": true,
+  "cucumberautocomplete.customParameters": [
+    // {
+    //   "parameter":"{ab}",
+    //   "value":"(a|b)"
+    // },
+    // {
+    //   "parameter": "/\{a.*\}/",
+    //   "value": "a"
+    // },
+    // {
+    //   "parameter": "'{string}'",
+    //   "value": "'[^']+'"
+    // },
+    {
+      "parameter": "'<{string}>'",
+      "value": "'[^']+'"
+    }
+  ]
+}

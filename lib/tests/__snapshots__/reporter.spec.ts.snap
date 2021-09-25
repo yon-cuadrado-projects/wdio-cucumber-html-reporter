@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step when they have not been added 1`] = `
+Object {
+  "embeddings": Array [
+    Object {
+      "data": "foo",
+      "mime_type": "type/string",
+    },
+  ],
+  "keyword": "Given",
+  "result": Object {
+    "status": "pending",
+  },
+}
+`;
+
+exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step which already has embeddings 1`] = `
+Object {
+  "embeddings": Array [
+    Object {
+      "data": "data-2",
+      "mime_type": "mime_type-2",
+    },
+  ],
+  "keyword": "Given",
+}
+`;
+
+exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step which already has embeddings 2`] = `
+Object {
+  "embeddings": Array [
+    Object {
+      "data": "data-2",
+      "mime_type": "mime_type-2",
+    },
+    Object {
+      "data": "data-2",
+      "mime_type": "mime_type-2",
+    },
+  ],
+  "keyword": "Given",
+}
+`;
+
+exports[`reporter on create should set the defaults only if the reportProperties option is provided 1`] = `
+Object {
+  "jsonFolder": "./tmp",
+  "logFile": "/mnt/ARCHIVING2/GIT/projects/0.webdriverio/wdio-html-reporter/.tmp/logFile.json",
+  "outputDir": undefined,
+}
+`;
+
+exports[`reporter on create should verify initial properties 1`] = `
+Object {
+  "jsonFolder": ".tmp/json/",
+  "logFile": "/mnt/ARCHIVING2/GIT/projects/0.webdriverio/wdio-html-reporter/.tmp/logFile.json",
+  "outputDir": undefined,
+}
+`;
+
+exports[`reporter on create should verify initial properties 2`] = `Object {}`;
+
+exports[`reporter onHookStart should add a pending after step 1`] = `
+Object {
+  "arguments": Array [],
+  "keyword": "After",
+  "line": "",
+  "match": Object {
+    "location": "can not be determined with webdriver.io",
+  },
+  "name": "",
+  "result": Object {
+    "duration": 0,
+    "status": "passed",
+  },
+}
+`;
+
+exports[`reporter onHookStart should add a pending before step 1`] = `
+Object {
+  "arguments": Array [],
+  "keyword": "Before",
+  "line": "",
+  "match": Object {
+    "location": "can not be determined with webdriver.io",
+  },
+  "name": "",
+  "result": Object {
+    "duration": 0,
+    "status": "passed",
+  },
+}
+`;
+
+exports[`reporter onSuiteStart should add a scenario to the feature if the feature is already there 1`] = `
+Array [
+  Object {
+    "description": "",
+    "id": "undefined;",
+    "keyword": "Scenario",
+    "name": "",
+    "steps": Array [],
+    "tags": Array [],
+    "type": undefined,
+  },
+]
+`;
+
+exports[`reporter onSuiteStart should add instance data to the feature if the feature is already there 1`] = `Object {}`;
+
+exports[`reporter onSuiteStart should add instance data to the feature if the feature is already there 2`] = `
+Object {
+  "feature": Object {
+    "description": "",
+    "elements": undefined,
+    "id": "empty-feature",
+    "keyword": "Feature",
+    "line": 2,
+    "name": "Empty feature",
+    "tags": "",
+  },
+}
+`;
+
+exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 1`] = `Object {}`;
+
+exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 2`] = `
+Object {
+  "feature": Object {
+    "description": "",
+    "elements": Array [
+      Object {
+        "description": "",
+        "id": "test;test",
+        "keyword": "Scenario",
+        "name": "test",
+        "steps": Array [],
+        "tags": Array [],
+        "type": undefined,
+      },
+    ],
+    "id": "test",
+    "keyword": "Feature",
+    "line": NaN,
+    "name": "test",
+    "tags": Array [],
+    "type": undefined,
+    "uri": "Can not be determined",
+  },
+}
+`;

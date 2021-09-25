@@ -12,7 +12,7 @@ import { getFailedMessage } from './utils';
  *
  * @return {object}
  */
-export const getCurrentStep = ( currentScenario: Scenario ): Step => currentScenario?.steps[currentScenario?.steps?.length - 1];
+export const getCurrentStep = ( currentScenario: Scenario ): Step => currentScenario.steps[currentScenario.steps.length - 1];
 
 /**
  * Add step data to the current running scenario
@@ -22,8 +22,8 @@ export const getCurrentStep = ( currentScenario: Scenario ): Step => currentScen
 export const updateStepStatus = ( test: TestStats | HookStats, report: Report, language: string ): void => {
     // There is always a scenario, take the last one
     const currentScenario = getCurrentScenario( report );
-    const currentSteps = currentScenario?.steps;
-    const currentStepsLength = currentSteps?.length;
+    const currentSteps = currentScenario.steps;
+    const currentStepsLength = currentSteps.length;
     const stepData = getStepDataObject( test, language );
 
     currentSteps[currentStepsLength - 1] = { ...getCurrentStep( getCurrentScenario( report ) ), ...stepData };

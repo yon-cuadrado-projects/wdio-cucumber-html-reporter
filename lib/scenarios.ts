@@ -7,10 +7,7 @@ import { SCENARIO } from './constants';
  *
  * @return {object}
  */
-export const getCurrentScenario = ( report: Report ): Scenario => report?.feature?.elements ?
-    report?.feature?.elements[report?.feature?.elements?.length - 1] :
-     <Scenario>{};
-
+export const getCurrentScenario = ( report: Report ): Scenario => report.feature.elements[report.feature.elements.length - 1];
 
 /**
  * Get the scenario data object

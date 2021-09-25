@@ -6,7 +6,7 @@ import {
     PASSED,
     TEXT_PLAIN,
 } from './constants';
-import { CucumberJsAttachment, MetadataObject, Report, Scenario, Step } from './models';
+import { CucumberJsAttachment, MetadataObject, Report } from './models';
 import WDIOReporter, { HookStats, SuiteStats, TestStats } from '@wdio/reporter';
 import { addStepData, containsSteps, updateStepStatus } from './steps';
 import { existsSync, outputJsonSync, readJsonSync } from 'fs-extra';
@@ -18,7 +18,6 @@ import { Reporters } from '@wdio/types';
 import { getFeatureDataObject } from './features';
 import logger from '@wdio/logger';
 import { resolve } from 'path';
-
 
 const log = logger( 'wdio-cucumber-html-reporter' );
 
@@ -123,7 +122,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
         //     this.report.feature = { ...this.report.feature, metadata: { ...this.instanceMetadata } };
         // }
 
-        if ( typeof this.report.feature?.elements !== 'undefined' ) {
+        if ( typeof this.report.feature.elements !== 'undefined' ) {
             this.report.feature.elements.push( getScenarioDataObject( payload, this.report.feature.id ) );
         }
     }
@@ -136,7 +135,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
      */
     public onHookStart ( payload: HookStatsExtended ): void {
         // There is always a scenario, take the last one
-        const currentSteps = getCurrentScenario( this.report )?.steps;
+        const currentSteps = getCurrentScenario( this.report ).steps;
         payload.state = PASSED;
         payload.keyword = containsSteps( currentSteps, this.language ) ? AFTER : BEFORE;
 
@@ -248,19 +247,17 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     public cucumberJsAttachment( attachment: CucumberJsAttachment ): void {
         // The attachment can be added to the current running scenario step
         const currentScenario = getCurrentScenario( this.report );
-        const currentStep = currentScenario?.steps ? currentScenario?.steps[currentScenario?.steps?.length - 1] : <Step>{};
+        const currentStep = currentScenario.steps[currentScenario.steps.length - 1];
         const embeddings = {
-            data: attachment?.data,
-            mime_type: attachment?.type,
+            data: attachment.data,
+            mime_type: attachment.type,
         };
 
         // Check if there is an embedding, if not, add it, else push it
-        if ( ! currentStep?.embeddings ) {
+        if ( ! currentStep.embeddings ) {
             currentStep.embeddings = [embeddings];
         } else {
-            if( typeof currentStep !== 'undefined' ) {
-                currentStep.embeddings.push( embeddings );
-            }
+            currentStep.embeddings.push( embeddings );
         }
     }
 }

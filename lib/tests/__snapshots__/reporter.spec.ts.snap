@@ -17,6 +17,24 @@ Object {
 
 exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step which already has embeddings 1`] = `
 Object {
+  "arguments": Array [
+    Object {
+      "rows": Array [
+        Object {
+          "cells": Array [
+            "Cucumber",
+            "Cucumis sativus",
+          ],
+        },
+        Object {
+          "cells": Array [
+            "Burr Gherkin",
+            "Cucumis anguria",
+          ],
+        },
+      ],
+    },
+  ],
   "embeddings": Array [
     Object {
       "data": "data-2",
@@ -29,6 +47,24 @@ Object {
 
 exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step which already has embeddings 2`] = `
 Object {
+  "arguments": Array [
+    Object {
+      "rows": Array [
+        Object {
+          "cells": Array [
+            "Cucumber",
+            "Cucumis sativus",
+          ],
+        },
+        Object {
+          "cells": Array [
+            "Burr Gherkin",
+            "Cucumis anguria",
+          ],
+        },
+      ],
+    },
+  ],
   "embeddings": Array [
     Object {
       "data": "data-2",

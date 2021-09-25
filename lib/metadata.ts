@@ -34,17 +34,17 @@ export class Metadata {
     public determineMetadata ( data: RunnerStatsExtended ): MetadataObject {
         let instanceData: AppData | BrowserData;
         const currentCapabilities = data.capabilities as W3CCapabilitiesExtended;
-        const optsCaps = browser?.options?.capabilities;
-        const currentConfigCapabilities = data?.capabilities as DesiredCapabilitiesExtended;
-        const w3cCaps = ( browser?.options as WebdriverIOExtended )?.requestedCapabilities;
-        const metadata: cjson_metadata = ( currentConfigCapabilities as W3CCapabilitiesExtended )?.['cjson:metadata'] // For WDIO V6
-            || w3cCaps?.cjson_metadata // When an app is used to test
+        const optsCaps = browser.options.capabilities;
+        const currentConfigCapabilities = data.capabilities as DesiredCapabilitiesExtended;
+        const w3cCaps = ( browser.options as WebdriverIOExtended ).requestedCapabilities;
+        const metadata: cjson_metadata = ( currentConfigCapabilities as W3CCapabilitiesExtended )['cjson:metadata'] // For WDIO V6
+            || w3cCaps?.['cjson:metadata'] // When an app is used to test
             || ( optsCaps as DesiredCapabilitiesExtended )?.['cjson:metadata'] // devtools
             || {} as cjson_metadata;
 
         // When an app is used to test
         // eslint-disable-next-line @typescript-eslint/tslint/config
-        if ( currentConfigCapabilities?.app || ( currentConfigCapabilities )?.testobject_app_id || metadata?.app ) {
+        if ( currentConfigCapabilities.app || ( currentConfigCapabilities ).testobject_app_id || metadata.app ) {
             instanceData = this.determineAppData( currentConfigCapabilities, metadata );
         } else {
             // Then a browser
@@ -69,7 +69,7 @@ export class Metadata {
      * @return {string}
      */
     public determineDeviceName ( metadata: cjson_metadata, currentConfigCapabilities: WebDriver.DesiredCapabilities ): string {
-        return ( metadata?.device || currentConfigCapabilities?.deviceName || `Device name ${NOT_KNOWN}` );
+        return ( metadata.device || currentConfigCapabilities.deviceName || `Device name ${NOT_KNOWN}` );
     }
 
     /**
@@ -80,15 +80,15 @@ export class Metadata {
      * @return {string}
      */
     public determinePlatformName ( metadata: cjson_metadata, currentCapabilities: WebDriver.DesiredCapabilities ): string {
-        const currentPlatformName = currentCapabilities?.platformName
-            ? currentCapabilities?.platformName.includes( 'mac' )
+        const currentPlatformName = currentCapabilities.platformName
+            ? currentCapabilities.platformName.includes( 'mac' )
                 ? 'osx'
                 : currentCapabilities.platformName.includes( 'windows' )
                     ? 'windows'
-                    : currentCapabilities?.platformName
+                    : currentCapabilities.platformName
             : `Platform name ${NOT_KNOWN}`;
-        return ( metadata.platform && metadata?.platform?.name )
-            ? metadata.platform?.name
+        return ( metadata.platform && metadata.platform.name )
+            ? metadata.platform.name
             : currentPlatformName;
     }
 
@@ -99,7 +99,7 @@ export class Metadata {
      * @return {string}
      */
     public determinePlatformVersion ( metadata: cjson_metadata ): string {
-        return ( metadata && metadata.platform && metadata.platform?.version )
+        return ( metadata && metadata.platform && metadata.platform.version )
             ? metadata.platform.version
             : `Version ${NOT_KNOWN}`;
     }
@@ -120,8 +120,8 @@ export class Metadata {
      * }
      */
     public determineAppData ( currentConfigCapabilities: DesiredCapabilitiesExtended, metadata: cjson_metadata ): AppData {
-        const metaAppName: string = ( metadata?.app && metadata.app?.name ) ? metadata?.app?.name : 'No metadata.app.name available';
-        const metaAppVersion: string = ( metadata?.app && metadata.app.version ) ? metadata.app.version : 'No metadata.app.version available';
+        const metaAppName: string = ( metadata.app && metadata.app.name ) ? metadata.app.name : 'No metadata.app.name available';
+        const metaAppVersion: string = ( metadata.app && metadata.app.version ) ? metadata.app.version : 'No metadata.app.version available';
         const appPath = currentConfigCapabilities.app || currentConfigCapabilities.testobject_app_id || metaAppName;
         const appName = appPath.substring( appPath.replace( '\\', '/' ).lastIndexOf( '/' ) ).replace( '/', '' );
 
@@ -150,13 +150,13 @@ export class Metadata {
      * }
      */
     public determineBrowserData ( currentCapabilities: WebDriver.DesiredCapabilities, currentConfigCapabilities: WebDriver.DesiredCapabilities, metadata: cjson_metadata ): BrowserData {
-        const browserName = currentCapabilities?.browserName
-            || currentConfigCapabilities?.browserName
-            || ( ( metadata && metadata?.browser && metadata.browser?.name ) ? metadata?.browser?.name : 'No metadata.browser.name available' );
-        const browserVersion = currentCapabilities?.version
-            || currentCapabilities?.browserVersion
-            || currentConfigCapabilities?.browserVersion
-            || ( ( metadata && metadata?.browser && metadata?.browser?.version ) ? metadata?.browser?.version : 'No metadata.browser.version available' );
+        const browserName = currentCapabilities.browserName
+            || currentConfigCapabilities.browserName
+            || ( ( metadata && metadata.browser && metadata.browser.name ) ? metadata.browser.name : 'No metadata.browser.name available' );
+        const browserVersion = currentCapabilities.version
+            || currentCapabilities.browserVersion
+            || currentConfigCapabilities.browserVersion
+            || ( ( metadata && metadata.browser && metadata.browser.version ) ? metadata.browser.version : 'No metadata.browser.version available' );
 
         return <BrowserData>{
             browser: {

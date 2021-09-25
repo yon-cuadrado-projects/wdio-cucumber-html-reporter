@@ -26,7 +26,7 @@ export interface TestrunnerExtended extends Options.Testrunner {
 export interface WebdriverIOExtended extends Options.WebdriverIO {
     app?: string;
     requestedCapabilities?: {
-        cjson_metadata?: cjson_metadata;
+        'cjson:metadata'?: cjson_metadata;
         w3cCaps: {
             alwaysMatch?: {
                 foo?: true;

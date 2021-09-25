@@ -297,7 +297,7 @@ describe( 'metadata', () => {
                     },
                     capabilities: {
                         browserName: 'chrome',
-                        'cjson_metadata': {},
+                        'cjson:metadata': {},
                     }
                 } as WebdriverIOExtended,
             } as Browser<'sync'>;
@@ -313,7 +313,7 @@ describe( 'metadata', () => {
                 options: {
                     capabilities: {
                         browserName: 'chrome',
-                        'cjson_metadata': {},
+                        'cjson:metadata': {},
                     },
                 } as WebdriverIOExtended,
 

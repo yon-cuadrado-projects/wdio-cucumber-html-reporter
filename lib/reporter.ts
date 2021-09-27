@@ -7,17 +7,17 @@ import {
     TEXT_PLAIN,
 } from './constants';
 import { CucumberJsAttachment, MetadataObject, Report } from './models';
-import WDIOReporter, { HookStats, SuiteStats, TestStats } from '@wdio/reporter';
+import { Models, generateReport } from 'cucumber-html-report-generator';
+import WDIOReporter, { HookStats, RunnerStats, SuiteStats, TestStats } from '@wdio/reporter';
 import { addStepData, containsSteps, updateStepStatus } from './steps';
+import { dirname, resolve } from 'path';
 import { existsSync, outputJsonSync, readJsonSync } from 'fs-extra';
 import { getCurrentScenario, getScenarioDataObject } from './scenarios';
 import { HookStatsExtended } from './types/wdio';
 import { Metadata } from './metadata';
-import type { Models } from 'cucumber-html-report-generator';
 import { Reporters } from '@wdio/types';
 import { getFeatureDataObject } from './features';
 import logger from '@wdio/logger';
-import { resolve } from 'path';
 
 const log = logger( 'wdio-cucumber-html-reporter' );
 
@@ -28,6 +28,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     public instanceMetadata: MetadataObject;
     public report: Report;
     public metadataClassObject: Metadata;
+    public reportProperties: Models.ReportGeneration;
 
     public constructor( reportProperties: Models.ReportGeneration, language?: string, logFile?: string ) {
         const options = <Partial<Reporters.Options>>{};
@@ -47,6 +48,8 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
             this.language = language;
         }
 
+        this.reportProperties = reportProperties ?? <Models.ReportGeneration>{};
+        this.reportProperties.jsonDir = reportProperties?.jsonDir ?? `./${DEFAULT_JSON_FOLDER}`;
         this.options = options;
         this.instanceMetadata = null;
         this.report = <Report>{};
@@ -94,16 +97,16 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
      * - onRunnerEnd
      */
 
-    // /**
-    //  * This hook is used to retrieve the browser data, but this is done only once
-    //  *
-    //  * @param {object} runnerData
-    //  */
-    // public onRunnerStart ( runnerData: RunnerStats ): void {
-    //     if ( !this.instanceMetadata ) {
-    //         this.instanceMetadata = this.metadataClassObject.determineMetadata( runnerData );
-    //     }
-    // }
+    /**
+     * This hook is used to retrieve the browser data, but this is done only once
+     *
+     * @param {object} runnerData
+     */
+    public onRunnerStart ( runnerData: RunnerStats ): void {
+        if ( !this.instanceMetadata ) {
+            this.instanceMetadata = this.metadataClassObject.determineMetadata( runnerData );
+        }
+    }
 
     /**
      * This hook is called twice:
@@ -228,14 +231,15 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     /**
      * Runner is done, write the file
      */
-    public onRunnerEnd (): void {
+    public async onRunnerEnd (): Promise<void> {
         const jsonFolder = resolve( process.cwd(), this.options.jsonFolder );
         const jsonFile = resolve( jsonFolder, `${this.report.feature.id}.json` );
         const json = [this.report.feature];
         // Check if there is an existing file, if so concat the data, else add the new
         const output = existsSync( jsonFile ) ? json.concat( readJsonSync( jsonFile ) ) : json;
-
         outputJsonSync( jsonFile, output );
+        this.reportProperties.jsonDir = dirname( jsonFile );
+        await generateReport.generate( this.reportProperties );
     }
 
     /**

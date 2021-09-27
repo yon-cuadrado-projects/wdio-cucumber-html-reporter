@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import { DEFAULT_LANGUAGE, FAILED, PASSED, PENDING, TEXT_PLAIN } from '../constants';
-import { HookStatsExtended, SuiteStatsExtended, TestStatsExtended } from '../types/wdio';
+import { HookStatsExtended, RunnerStatsExtended, SuiteStatsExtended, TestStatsExtended } from '../types/wdio';
 import { Report, Scenario } from '../models';
 import { copySync, readJsonSync, readdirSync, removeSync } from 'fs-extra';
 import CucumberHtmlJsonReporter from '../reporter';
 import { EMPTY_FEATURE } from './__mocks__/mocks';
+import { Metadata } from '../metadata';
 import type { Models } from 'cucumber-html-report-generator';
 import { fileExists } from './fileExists';
 import path from 'path';
@@ -42,6 +43,33 @@ describe( 'reporter', () => {
             expect( tmpReporter.options ).toMatchSnapshot();
             expect( tmpReporter.instanceMetadata ).toBeNull();
             expect( tmpReporter.report ).toMatchSnapshot();
+        } );
+    } );
+
+    describe( 'onRunnerStart', () => {
+        it( 'should set instance data if it is not available yet', () => {
+            const metadata = { foo: 'bar' };
+            const metadataClassObject: Metadata = tmpReporter.metadataClassObject;
+            const determineMetadataSpy: jest.SpyInstance = jest.spyOn( metadataClassObject, 'determineMetadata' ).mockReturnValue( metadata );
+
+            expect( tmpReporter.instanceMetadata ).toBeNull();
+
+            tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
+
+            expect( determineMetadataSpy ).toHaveBeenCalled();
+            expect( tmpReporter.instanceMetadata ).toEqual( metadata );
+        } );
+
+        it( 'should set not set instance data if it is already available', () => {
+            const metadata = { foo: 'bar' };
+            const determineMetadataSpy: jest.SpyInstance = jest.spyOn( new Metadata(), 'determineMetadata' ).mockReturnValue( metadata );
+
+            tmpReporter.instanceMetadata = metadata;
+            expect( tmpReporter.instanceMetadata ).toEqual( metadata );
+
+            tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
+
+            expect( determineMetadataSpy ).not.toHaveBeenCalled();
         } );
     } );
 
@@ -234,46 +262,48 @@ describe( 'reporter', () => {
     } );
 
     describe( 'onRunnerEnd', () => {
-        it( 'should store the json file on the file system', () => {
-            const jsonFolder = './.tmp/ut-folder';
+        it( 'should store the json file on the file system', async () => {
+            const outputFolder = path.join( process.cwd(),'./.tmp/output' );
+            const jsonFile = `${outputFolder}/this-feature.json`;
 
+            removeSync( outputFolder );
+            expect( fileExists( outputFolder ) ).toEqual( false );
+            copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
+            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder }, 'en' );
             tmpReporter.report.feature = { id: 'this-feature' };
-            tmpReporter.options.jsonFolder = jsonFolder;
 
-            expect( fileExists( jsonFolder ) ).toEqual( false );
+            await tmpReporter.onRunnerEnd();
 
-            tmpReporter.onRunnerEnd();
-
-            const files = readdirSync( jsonFolder );
+            const files = readdirSync( outputFolder );
 
             expect( files.length ).toEqual( 1 );
             expect( files[0].includes( tmpReporter.report.feature.id ) ).toEqual( true );
-            expect( fileExists( jsonFolder ) ).toEqual( true );
+            expect( fileExists( jsonFile ) ).toEqual( true );
 
             // Clean up
-            removeSync( jsonFolder );
+            removeSync( outputFolder );
         } );
 
-        it( 'should be able to add json to an existing json output', () => {
-            const jsonFolder = './.tmp/ut-folder';
-            const jsonFile = `${jsonFolder}/this-feature.json`;
-
+        it( 'should be able to add json to an existing json output', async () => {
+            const outputFolder = path.join( process.cwd(),'./.tmp/output' );
+            const jsonFile = `${outputFolder}/mock.json`;
+            removeSync( outputFolder );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
 
+            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder }, 'en' );
             tmpReporter.report.feature = { id: 'this-feature' };
-            tmpReporter.options.jsonFolder = jsonFolder;
 
             expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );
 
-            tmpReporter.onRunnerEnd();
+            await tmpReporter.onRunnerEnd();
 
-            const files = readdirSync( jsonFolder );
+            const files = readdirSync( outputFolder );
 
-            expect( files.length ).toEqual( 1 );
-            expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 2 );
+            expect( files.length ).toEqual( 2 );
+            expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );
 
             // Clean up
-            removeSync( jsonFolder );
+            removeSync( outputFolder );
         } );
     } );
 

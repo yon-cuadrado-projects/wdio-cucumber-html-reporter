@@ -1,5 +1,6 @@
-import { AppData, BrowserData, MetadataObject, cjson_metadata } from './models';
+import { AppData, BrowserData, cjson_metadata } from './models';
 import { DesiredCapabilitiesExtended, RunnerStatsExtended, W3CCapabilitiesExtended, WebdriverIOExtended } from './types/wdio';
+import { Models } from 'cucumber-html-report-generator';
 import { NOT_KNOWN } from './constants';
 import WebDriver from 'webdriver';
 
@@ -31,7 +32,9 @@ export class Metadata {
      * }
      * ```
      */
-    public determineMetadata ( data: RunnerStatsExtended ): MetadataObject {
+    public determineMetadata ( data: RunnerStatsExtended ): Models.Metadata[] {
+        const featureMetadata = <Models.Metadata[]>[];
+
         let instanceData: AppData | BrowserData;
         const currentCapabilities = data.capabilities as W3CCapabilitiesExtended;
         const optsCaps = browser.options.capabilities;
@@ -46,19 +49,23 @@ export class Metadata {
         // eslint-disable-next-line @typescript-eslint/tslint/config
         if ( currentConfigCapabilities.app || ( currentConfigCapabilities ).testobject_app_id || metadata.app ) {
             instanceData = this.determineAppData( currentConfigCapabilities, metadata );
+            featureMetadata.push( <Models.Metadata>{ name: 'application',value: `${ instanceData.app.name} ${instanceData.app.version}` } );
         } else {
             // Then a browser
             instanceData = this.determineBrowserData( currentCapabilities, currentConfigCapabilities, metadata );
+            featureMetadata.push( <Models.Metadata>{ name: 'browser',value: `${ instanceData.browser.name} ${instanceData.browser.version}` } );
         }
 
-        return <MetadataObject>{
-            ...instanceData,
-            device: this.determineDeviceName( metadata, currentConfigCapabilities ),
-            platform: {
-                name: this.determinePlatformName( metadata, currentCapabilities ),
-                version: this.determinePlatformVersion( metadata ),
-            },
+        const device = this.determineDeviceName( metadata, currentConfigCapabilities );
+        const platform = {
+            name: this.determinePlatformName( metadata, currentCapabilities ),
+            version: this.determinePlatformVersion( metadata ),
         };
+
+        featureMetadata.push( <Models.Metadata>{ name: 'device', value: device } );
+        featureMetadata.push( <Models.Metadata>{ name: 'platform', value: `${platform.name} ${platform.version}` } );
+
+        return featureMetadata;
     }
 
     /**

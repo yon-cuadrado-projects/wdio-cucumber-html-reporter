@@ -6,7 +6,7 @@ import {
     PASSED,
     TEXT_PLAIN,
 } from './constants';
-import { CucumberJsAttachment, MetadataObject, Report } from './models';
+import { CucumberJsAttachment, Report } from './models';
 import { Models, generateReport } from 'cucumber-html-report-generator';
 import WDIOReporter, { HookStats, RunnerStats, SuiteStats, TestStats } from '@wdio/reporter';
 import { addStepData, containsSteps, updateStepStatus } from './steps';
@@ -25,7 +25,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     public language: string;
     public options: Partial<Reporters.Options>;
     public reporterName: string;
-    public instanceMetadata: MetadataObject;
+    public instanceMetadata: Models.Metadata[];
     public report: Report;
     public metadataClassObject: Metadata;
     public reportProperties: Models.ReportGeneration;
@@ -76,8 +76,6 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     public registerListeners (): void {
         process.on( 'wdioCucumberHtmlReporter:attachment', this.cucumberJsAttachment.bind( this ) );
     }
-
-
 
     /**
      * The order of running of the `on*` is the following:

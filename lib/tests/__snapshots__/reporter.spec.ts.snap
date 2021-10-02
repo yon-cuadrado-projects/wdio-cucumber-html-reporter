@@ -143,22 +143,6 @@ Array [
 ]
 `;
 
-exports[`reporter onSuiteStart should add instance data to the feature if the feature is already there 1`] = `Object {}`;
-
-exports[`reporter onSuiteStart should add instance data to the feature if the feature is already there 2`] = `
-Object {
-  "feature": Object {
-    "description": "",
-    "elements": undefined,
-    "id": "empty-feature",
-    "keyword": "Feature",
-    "line": 2,
-    "name": "Empty feature",
-    "tags": "",
-  },
-}
-`;
-
 exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 1`] = `Object {}`;
 
 exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 2`] = `

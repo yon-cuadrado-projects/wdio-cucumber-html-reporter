@@ -1,11 +1,10 @@
 import * as fs from 'fs';
 import { DEFAULT_LANGUAGE, FAILED, PASSED, PENDING, TEXT_PLAIN } from '../constants';
-import { HookStatsExtended, RunnerStatsExtended, SuiteStatsExtended, TestStatsExtended } from '../types/wdio';
+import { HookStatsExtended, SuiteStatsExtended, TestStatsExtended } from '../types/wdio';
 import { Report, Scenario } from '../models';
 import { copySync, readJsonSync, readdirSync, removeSync } from 'fs-extra';
 import CucumberHtmlJsonReporter from '../reporter';
-import { EMPTY_FEATURE } from './__mocks__/mocks';
-import { Metadata } from '../metadata';
+// import { EMPTY_FEATURE } from './__mocks__/mocks';
 import type { Models } from 'cucumber-html-report-generator';
 import { fileExists } from './fileExists';
 import path from 'path';
@@ -29,11 +28,6 @@ describe( 'reporter', () => {
     } );
 
     describe( 'on create', () => {
-        // it( 'should verify initial properties', () => {
-        //     expect( tmpReporter.options ).toMatchSnapshot();
-        //     expect( tmpReporter.instanceMetadata ).toBeNull();
-        //     expect( tmpReporter.report ).toMatchSnapshot();
-        // } );
         it( 'should set the defaults only if the reportProperties option is provided', () => {
             const noOptionsReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: './tmp' } );
             expect( noOptionsReporter.options ).toMatchSnapshot();
@@ -47,30 +41,30 @@ describe( 'reporter', () => {
     } );
 
     describe( 'onRunnerStart', () => {
-        it( 'should set instance data if it is not available yet', () => {
-            const metadata = { foo: 'bar' };
-            const metadataClassObject: Metadata = tmpReporter.metadataClassObject;
-            const determineMetadataSpy: jest.SpyInstance = jest.spyOn( metadataClassObject, 'determineMetadata' ).mockReturnValue( metadata );
+        // it( 'should set instance data if it is not available yet', () => {
+        //     const metadata = { foo: 'bar' };
+        //     const metadataClassObject: Metadata = tmpReporter.metadataClassObject;
+        //     const determineMetadataSpy: jest.SpyInstance = jest.spyOn( metadataClassObject, 'determineMetadata' ).mockReturnValue( metadata );
 
-            expect( tmpReporter.instanceMetadata ).toBeNull();
+        //     expect( tmpReporter.instanceMetadata ).toBeNull();
 
-            tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
+        //     tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
 
-            expect( determineMetadataSpy ).toHaveBeenCalled();
-            expect( tmpReporter.instanceMetadata ).toEqual( metadata );
-        } );
+        //     expect( determineMetadataSpy ).toHaveBeenCalled();
+        //     expect( tmpReporter.instanceMetadata ).toEqual( metadata );
+        // } );
 
-        it( 'should set not set instance data if it is already available', () => {
-            const metadata = { foo: 'bar' };
-            const determineMetadataSpy: jest.SpyInstance = jest.spyOn( new Metadata(), 'determineMetadata' ).mockReturnValue( metadata );
+        // it( 'should set not set instance data if it is already available', () => {
+        //     const metadata = { foo: 'bar' };
+        //     const determineMetadataSpy: jest.SpyInstance = jest.spyOn( new Metadata(), 'determineMetadata' ).mockReturnValue( metadata );
 
-            tmpReporter.instanceMetadata = metadata;
-            expect( tmpReporter.instanceMetadata ).toEqual( metadata );
+        //     tmpReporter.instanceMetadata = metadata;
+        //     expect( tmpReporter.instanceMetadata ).toEqual( metadata );
 
-            tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
+        //     tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
 
-            expect( determineMetadataSpy ).not.toHaveBeenCalled();
-        } );
+        //     expect( determineMetadataSpy ).not.toHaveBeenCalled();
+        // } );
     } );
 
     describe( 'onSuiteStart', () => {
@@ -83,20 +77,20 @@ describe( 'reporter', () => {
             expect( tmpReporter.report ).toMatchSnapshot();
         } );
 
-        it( 'should add instance data to the feature if the feature is already there', () => {
-            const metadata = { foo: 'bar' };
-            tmpReporter = new CucumberHtmlJsonReporter( null, 'en', language );
+        // it( 'should add instance data to the feature if the feature is already there', () => {
+        //     const metadata = { foo: 'bar' };
+        //     tmpReporter = new CucumberHtmlJsonReporter( null, 'en', language );
 
-            expect( tmpReporter.report ).toMatchSnapshot();
+        //     expect( tmpReporter.report ).toMatchSnapshot();
 
-            tmpReporter.instanceMetadata = metadata;
-            tmpReporter.report.feature = EMPTY_FEATURE;
+        //     tmpReporter.instanceMetadata = metadata;
+        //     tmpReporter.report.feature = EMPTY_FEATURE;
 
-            tmpReporter.report.feature.elements = undefined;
-            tmpReporter.onSuiteStart( { title: '', uid: '' } as SuiteStatsExtended );
+        //     tmpReporter.report.feature.elements = undefined;
+        //     tmpReporter.onSuiteStart( { title: '', uid: '' } as SuiteStatsExtended );
 
-            expect( tmpReporter.report ).toMatchSnapshot();
-        } );
+        //     expect( tmpReporter.report ).toMatchSnapshot();
+        // } );
 
         it( 'should add a scenario to the feature if the feature is already there', () => {
             tmpReporter.report = <Report>{

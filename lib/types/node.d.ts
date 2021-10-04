@@ -10,7 +10,7 @@ declare global {
         }
 
         export interface Global {
-            browser: Browser<'sync'>;
+            browser: Browser<'async'>;
         }
     }
 

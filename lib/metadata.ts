@@ -1,65 +1,33 @@
-import { AppData, BrowserData, cjson_metadata } from './models';
 import { DesiredCapabilitiesExtended, RunnerStatsExtended, W3CCapabilitiesExtended, WebdriverIOExtended } from './types/wdio';
+import { Browser } from 'webdriverio';
 import { Models } from 'cucumber-html-report-generator';
 import { NOT_KNOWN } from './constants';
 import WebDriver from 'webdriver';
+import { cjson_metadata } from './models';
 
 export class Metadata {
-    /**
-     * ```
-     * Determine the metadata that needs to be added
-     *
-     * @param {object} data instance data
-     *
-     * @returns {
-     *  {
-     *      metadata: {
-     *          app: {
-     *              name: string,
-     *              version: string
-     *          },
-     *          browser: {
-     *              name: string,
-     *              version: string
-     *          },
-     *          device: string,
-     *          platform: {
-     *              name: string,
-     *              version: string
-     *          }
-     *      }
-     *  }
-     * }
-     * ```
-     */
     public determineMetadata ( data: RunnerStatsExtended ): Models.Metadata[] {
         const featureMetadata = <Models.Metadata[]>[];
-
-        let instanceData: AppData | BrowserData;
         const currentCapabilities = data.capabilities as W3CCapabilitiesExtended;
-        const optsCaps = browser.options.capabilities;
+        let w3cCaps = ( < W3CCapabilitiesExtended | DesiredCapabilitiesExtended>( data.config.capabilities ) )?.['cjson:metadata'];
         const currentConfigCapabilities = data.capabilities as DesiredCapabilitiesExtended;
-        const w3cCaps = ( browser.options as WebdriverIOExtended ).requestedCapabilities;
-        const metadata: cjson_metadata = ( currentConfigCapabilities as W3CCapabilitiesExtended )['cjson:metadata'] // For WDIO V6
-            || w3cCaps?.['cjson:metadata'] // When an app is used to test
-            || ( optsCaps as DesiredCapabilitiesExtended )?.['cjson:metadata'] // devtools
-            || {} as cjson_metadata;
+        const metadataFromWdioConfiguration: cjson_metadata = currentConfigCapabilities?.['cjson:metadata'];
 
-        // When an app is used to test
-        // eslint-disable-next-line @typescript-eslint/tslint/config
-        if ( currentConfigCapabilities.app || ( currentConfigCapabilities ).testobject_app_id || metadata.app ) {
-            instanceData = this.determineAppData( currentConfigCapabilities, metadata );
-            featureMetadata.push( <Models.Metadata>{ name: 'application',value: `${ instanceData.app.name} ${instanceData.app.version}` } );
-        } else {
-            // Then a browser
-            instanceData = this.determineBrowserData( currentCapabilities, currentConfigCapabilities, metadata );
-            featureMetadata.push( <Models.Metadata>{ name: 'browser',value: `${ instanceData.browser.name} ${instanceData.browser.version}` } );
+        if( typeof browser !== 'undefined' ){
+            w3cCaps = w3cCaps ?? ( ( browser as Browser<'async'> ).options as WebdriverIOExtended )?.requestedCapabilities?.['cjson:metadata'];
+            const optsCaps = browser.options.capabilities;
+            const browserMetadata = metadataFromWdioConfiguration ?? ( optsCaps as DesiredCapabilitiesExtended )?.['cjson:metadata'] ?? w3cCaps;
+            const instanceBrowserData = this.determineBrowserData( currentCapabilities, currentConfigCapabilities, browserMetadata );
+            featureMetadata.push( instanceBrowserData );
+        } else{
+            const instanceAppData = this.determineAppData( currentConfigCapabilities, metadataFromWdioConfiguration );
+            featureMetadata.push( instanceAppData );
         }
 
-        const device = this.determineDeviceName( metadata, currentConfigCapabilities );
+        const device = this.determineDeviceName( metadataFromWdioConfiguration, currentConfigCapabilities );
         const platform = {
-            name: this.determinePlatformName( metadata, currentCapabilities ),
-            version: this.determinePlatformVersion( metadata ),
+            name: this.determinePlatformName( metadataFromWdioConfiguration, currentCapabilities ),
+            version: this.determinePlatformVersion( metadataFromWdioConfiguration ),
         };
 
         featureMetadata.push( <Models.Metadata>{ name: 'device', value: device } );
@@ -68,24 +36,10 @@ export class Metadata {
         return featureMetadata;
     }
 
-    /**
-     * Determine the device name
-     *
-     * @param {object} metadata
-     * @param {object} currentConfigCapabilities
-     * @return {string}
-     */
     public determineDeviceName ( metadata: cjson_metadata, currentConfigCapabilities: WebDriver.DesiredCapabilities ): string {
-        return ( metadata.device || currentConfigCapabilities.deviceName || `Device name ${NOT_KNOWN}` );
+        return ( metadata?.device || currentConfigCapabilities.deviceName || `Device name ${NOT_KNOWN}` );
     }
 
-    /**
-     * Determine the platform name
-     *
-     * @param {object} metadata
-     * @param {object} currentCapabilities
-     * @return {string}
-     */
     public determinePlatformName ( metadata: cjson_metadata, currentCapabilities: WebDriver.DesiredCapabilities ): string {
         const currentPlatformName = currentCapabilities.platformName
             ? currentCapabilities.platformName.includes( 'mac' )
@@ -94,82 +48,35 @@ export class Metadata {
                     ? 'windows'
                     : currentCapabilities.platformName
             : `Platform name ${NOT_KNOWN}`;
-        return ( metadata.platform && metadata.platform.name )
-            ? metadata.platform.name
-            : currentPlatformName;
+        return metadata?.platform?.name ?? currentPlatformName;
     }
 
-    /**
-     * Determine the platform version
-     *
-     * @param {object} metadata
-     * @return {string}
-     */
     public determinePlatformVersion ( metadata: cjson_metadata ): string {
-        return ( metadata && metadata.platform && metadata.platform.version )
-            ? metadata.platform.version
-            : `Version ${NOT_KNOWN}`;
+        return metadata?.platform?.version ?? `Version ${NOT_KNOWN}`;
     }
 
-    /**
-     * Determine the app data
-     *
-     * @param {object} currentConfigCapabilities The capabilities from the configured capabilities
-     * @param {object} metadata The custom set capabilities
-     *
-     * @returns {
-     * {
-     * app: {
-     *          name: string,
-     *          version: string,
-     *      },
-     *  }
-     * }
-     */
-    public determineAppData ( currentConfigCapabilities: DesiredCapabilitiesExtended, metadata: cjson_metadata ): AppData {
-        const metaAppName: string = ( metadata.app && metadata.app.name ) ? metadata.app.name : 'No metadata.app.name available';
-        const metaAppVersion: string = ( metadata.app && metadata.app.version ) ? metadata.app.version : 'No metadata.app.version available';
+    public determineAppData ( currentConfigCapabilities: DesiredCapabilitiesExtended, metadata: cjson_metadata ): Models.Metadata {
+        const metaAppName: string = metadata?.app?.name ?? 'No metadata.app.name available';
+        const metaAppVersion: string = metadata?.app?.version ?? 'No metadata.app.version available';
         const appPath = currentConfigCapabilities.app || currentConfigCapabilities.testobject_app_id || metaAppName;
         const appName = appPath.substring( appPath.replace( '\\', '/' ).lastIndexOf( '/' ) ).replace( '/', '' );
 
         return {
-            app: {
-                name: appName,
-                version: metaAppVersion,
-            },
+            name: 'app', value: `${appName} ${metaAppVersion}`
         };
     }
 
-    /**
-     * Determine the browser data
-     *
-     * @param {object} currentCapabilities The capabilities of the current run, that holds the most actual data
-     * @param {object} currentConfigCapabilities The capabilities from the configured capabilities
-     * @param {object} metadata The custom set capabilities
-     *
-     * @returns {
-     *  {
-     *      browser: {
-     *          name: string,
-     *          version: string,
-     *      },
-     *  }
-     * }
-     */
-    public determineBrowserData ( currentCapabilities: WebDriver.DesiredCapabilities, currentConfigCapabilities: WebDriver.DesiredCapabilities, metadata: cjson_metadata ): BrowserData {
+    public determineBrowserData ( currentCapabilities: WebDriver.DesiredCapabilities, currentConfigCapabilities: WebDriver.DesiredCapabilities, metadata: cjson_metadata ): Models.Metadata {
         const browserName = currentCapabilities.browserName
             || currentConfigCapabilities.browserName
-            || ( ( metadata && metadata.browser && metadata.browser.name ) ? metadata.browser.name : 'No metadata.browser.name available' );
+            || ( metadata?.browser?.name ?? 'No metadata.browser.name available' );
         const browserVersion = currentCapabilities.version
             || currentCapabilities.browserVersion
             || currentConfigCapabilities.browserVersion
-            || ( ( metadata && metadata.browser && metadata.browser.version ) ? metadata.browser.version : 'No metadata.browser.version available' );
+            || ( metadata?.browser?.version ?? 'No metadata.browser.version available' );
 
-        return <BrowserData>{
-            browser: {
-                name: browserName,
-                version: browserVersion,
-            }
+        return{
+            name: 'browser', value: `${browserName} ${browserVersion}`
         };
     }
 }

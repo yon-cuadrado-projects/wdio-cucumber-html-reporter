@@ -48,7 +48,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
             this.language = language;
         }
 
-        this.reportProperties = reportProperties ?? <Models.ReportGeneration>{};
+        this.reportProperties = reportProperties;
         this.reportProperties.jsonDir = reportProperties?.jsonDir ?? `./${DEFAULT_JSON_FOLDER}`;
         this.options = options;
         this.instanceMetadata = null;
@@ -118,10 +118,10 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
             this.report.feature = getFeatureDataObject( payload );
         }
 
-        // /* istanbul ignore else */
-        // if ( !this.report.feature.metadata ) {
-        //     this.report.feature = { ...this.report.feature, metadata: { ...this.instanceMetadata } };
-        // }
+        /* istanbul ignore else */
+        if ( !this.report.feature.metadata ) {
+            this.report.feature = { ...this.report.feature, metadata: { ...this.instanceMetadata } };
+        }
 
         if ( typeof this.report.feature.elements !== 'undefined' ) {
             this.report.feature.elements.push( getScenarioDataObject( payload, this.report.feature.id ) );

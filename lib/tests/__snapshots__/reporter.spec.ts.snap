@@ -97,6 +97,14 @@ Object {
 
 exports[`reporter on create should verify initial properties 2`] = `Object {}`;
 
+exports[`reporter on create should verify initial properties 3`] = `
+Object {
+  "feature": Object {
+    "elements": Array [],
+  },
+}
+`;
+
 exports[`reporter onHookStart should add a pending after step 1`] = `
 Object {
   "arguments": Array [],
@@ -133,9 +141,9 @@ exports[`reporter onSuiteStart should add a scenario to the feature if the featu
 Array [
   Object {
     "description": "",
-    "id": "undefined;",
+    "id": "test;test",
     "keyword": "Scenario",
-    "name": "",
+    "name": "test",
     "steps": Array [],
     "tags": Array [],
     "type": undefined,
@@ -148,25 +156,7 @@ exports[`reporter onSuiteStart should add the CucumberJS feature object if it is
 exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 2`] = `
 Object {
   "feature": Object {
-    "description": "",
-    "elements": Array [
-      Object {
-        "description": "",
-        "id": "test;test",
-        "keyword": "Scenario",
-        "name": "test",
-        "steps": Array [],
-        "tags": Array [],
-        "type": undefined,
-      },
-    ],
-    "id": "test",
-    "keyword": "Feature",
-    "line": NaN,
-    "name": "test",
-    "tags": Array [],
-    "type": undefined,
-    "uri": "Can not be determined",
+    "metadata": Object {},
   },
 }
 `;

@@ -1,4 +1,5 @@
 import { Argument, Tag } from '@wdio/reporter';
+import { Models } from 'cucumber-html-report-generator';
 
 
 export interface BrowserData {
@@ -50,7 +51,7 @@ export interface Feature {
     };
     keyword?: string;
     type?: string;
-    metadata?: MetadataObject;
+    metadata?: Models.Metadata[];
     description?: string;
     line?: number;
     name?: string;

@@ -1,5 +1,5 @@
 import type { Capabilities, Options } from '@wdio/types';
-import { DesiredCapabilitiesExtended, HookStatsExtended, RunnerStatsExtended, SuiteStatsExtended, TestStatsExtended, TestrunnerExtended } from '../../types/wdio';
+import { DesiredCapabilitiesExtended, HookStatsExtended, RunnerStatsExtended, SuiteStatsExtended, TestStatsExtended, TestrunnerExtended, W3CCapabilitiesExtended } from '../../types/wdio';
 import { Feature, Scenario, cjson_metadata } from '../../models';
 import { HookStats, RunnerStats, SuiteStats, Test, TestStats } from '@wdio/reporter';
 import { WriteStream } from 'fs';
@@ -21,21 +21,150 @@ export const EMPTY_SCENARIO: Scenario = {
     id: 'create-passed-feature;open-website',
     steps: [],
 };
-export const SMALL_RUNNER_STATS: RunnerStats = {
+export const SMALL_RUNNER_STATS: RunnerStatsExtended = {
+    capabilities: {},
+    config: <Options.Testrunner>{},
+    type: 'runner',
+    start: new Date( '2019-07-14T07:25:20.897Z' ),
+    _duration: 0,
+    duration: 0,
+    complete: (): void => { },
+    cid: '0-0',
+    sessionId: '',
+    instanceOptions: {},
+    sanitizedCapabilities: 'chrome.75_0_3770_100.macosx',
+    specs: ['/Users/wswebcreation/Sauce/Git/webdriverio-cucumberjs/__tests__/features/passed.feature'],
+    isMultiremote: false
+};
+export const SMALL_RUNNER_STATS_WITH_CJSON: RunnerStats = {
     capabilities:
-    {
-        browserName: 'chrome',
-        chromedriverVersion: '2.46.628411 (3324f4c8be9ff2f70a05a30ebc72ffb013e1a71e)',
-        chromeOptions: {
-            args: ['user-data-dir=/var/folders/rb/_hbqv7fn5114b206t2s05fs40000gn/T/.org.chromium.Chromium.uwkY0A'],
-        },
-        'goog:chromeOptions': {
-            debuggerAddress: 'localhost:53158'
-        },
-        platform: 'Mac OS X',
-        proxy: {},
-        version: '75.0.3770.100',
-    },
+        {
+            'cjson:metadata': {
+                'app': {
+                    'name': 'mock-appName',
+                    'version': 'mock-appVersion',
+                }
+            }
+        } as W3CCapabilitiesExtended,
+    config: <Options.Testrunner>{},
+    type: 'runner',
+    start: new Date( '2019-07-14T07:25:20.897Z' ),
+    _duration: 0,
+    duration: 0,
+    complete: (): void => { },
+    cid: '0-0',
+    sessionId: '',
+    instanceOptions: {},
+    sanitizedCapabilities: 'chrome.75_0_3770_100.macosx',
+    specs: ['/Users/wswebcreation/Sauce/Git/webdriverio-cucumberjs/__tests__/features/passed.feature'],
+    isMultiremote: false
+};
+export const SMALL_RUNNER_STATS_PLATFORM_MAC: RunnerStats = {
+    capabilities:
+        {
+            platformName: 'mac',
+        } as DesiredCapabilitiesExtended,
+    config: <Options.Testrunner>{},
+    type: 'runner',
+    start: new Date( '2019-07-14T07:25:20.897Z' ),
+    _duration: 0,
+    duration: 0,
+    complete: (): void => { },
+    cid: '0-0',
+    sessionId: '',
+    instanceOptions: {},
+    sanitizedCapabilities: 'chrome.75_0_3770_100.macosx',
+    specs: ['/Users/wswebcreation/Sauce/Git/webdriverio-cucumberjs/__tests__/features/passed.feature'],
+    isMultiremote: false
+};
+export const SMALL_RUNNER_STATS_PLATFORM_OSX: RunnerStats = {
+    capabilities:
+        {
+            platformName: 'osx',
+        } as DesiredCapabilitiesExtended,
+    config: <Options.Testrunner>{},
+    type: 'runner',
+    start: new Date( '2019-07-14T07:25:20.897Z' ),
+    _duration: 0,
+    duration: 0,
+    complete: (): void => { },
+    cid: '0-0',
+    sessionId: '',
+    instanceOptions: {},
+    sanitizedCapabilities: 'chrome.75_0_3770_100.macosx',
+    specs: ['/Users/wswebcreation/Sauce/Git/webdriverio-cucumberjs/__tests__/features/passed.feature'],
+    isMultiremote: false
+};
+export const SMALL_RUNNER_STATS_PLATFORM_WINDOWS: RunnerStats = {
+    capabilities:
+        {
+            platformName: 'windows',
+        } as DesiredCapabilitiesExtended,
+    config: <Options.Testrunner>{},
+    type: 'runner',
+    start: new Date( '2019-07-14T07:25:20.897Z' ),
+    _duration: 0,
+    duration: 0,
+    complete: (): void => { },
+    cid: '0-0',
+    sessionId: '',
+    instanceOptions: {},
+    sanitizedCapabilities: 'chrome.75_0_3770_100.macosx',
+    specs: ['/Users/wswebcreation/Sauce/Git/webdriverio-cucumberjs/__tests__/features/passed.feature'],
+    isMultiremote: false
+};
+export const SMALL_RUNNER_STATS_PLATFORM_UNKNOWN: RunnerStats = {
+    capabilities:
+        {
+            'cjson:metadata': {
+                'app': {
+                    'name': 'mock-appName',
+                    'version': 'mock-appVersion',
+                }
+            },
+            platformName: 'unknown',
+        } as DesiredCapabilitiesExtended,
+    config: <Options.Testrunner>{},
+    type: 'runner',
+    start: new Date( '2019-07-14T07:25:20.897Z' ),
+    _duration: 0,
+    duration: 0,
+    complete: (): void => { },
+    cid: '0-0',
+    sessionId: '',
+    instanceOptions: {},
+    sanitizedCapabilities: 'chrome.75_0_3770_100.macosx',
+    specs: ['/Users/wswebcreation/Sauce/Git/webdriverio-cucumberjs/__tests__/features/passed.feature'],
+    isMultiremote: false
+};
+export const SMALL_RUNNER_STATS_WITH_PLATFORM: RunnerStats = {
+    capabilities:
+        {
+            platform: 'linux',
+        } as DesiredCapabilitiesExtended,
+    config: <Options.Testrunner>{},
+    type: 'runner',
+    start: new Date( '2019-07-14T07:25:20.897Z' ),
+    _duration: 0,
+    duration: 0,
+    complete: (): void => { },
+    cid: '0-0',
+    sessionId: '',
+    instanceOptions: {},
+    sanitizedCapabilities: 'chrome.75_0_3770_100.macosx',
+    specs: ['/Users/wswebcreation/Sauce/Git/webdriverio-cucumberjs/__tests__/features/passed.feature'],
+    isMultiremote: false
+};
+export const SMALL_RUNNER_STATS_WITH_PLATFORM_NAME: RunnerStats = {
+    capabilities:
+        {
+            'cjson:metadata': {
+                'platform': {
+                    'name': 'mock-appName',
+                    'version': 'mock-appVersion',
+                }
+            },
+        } as DesiredCapabilitiesExtended,
     config: <Options.Testrunner>{},
     type: 'runner',
     start: new Date( '2019-07-14T07:25:20.897Z' ),

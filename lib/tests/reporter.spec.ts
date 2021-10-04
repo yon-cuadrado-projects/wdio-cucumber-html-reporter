@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import { DEFAULT_LANGUAGE, FAILED, PASSED, PENDING, TEXT_PLAIN } from '../constants';
-import { HookStatsExtended, SuiteStatsExtended, TestStatsExtended } from '../types/wdio';
+import { HookStatsExtended, RunnerStatsExtended, SuiteStatsExtended, TestStatsExtended } from '../types/wdio';
 import { Report, Scenario } from '../models';
 import { copySync, readJsonSync, readdirSync, removeSync } from 'fs-extra';
 import CucumberHtmlJsonReporter from '../reporter';
-// import { EMPTY_FEATURE } from './__mocks__/mocks';
+import { FULL_RUNNER_STATS } from './__mocks__/mocks';
+import { Metadata } from '../metadata';
 import type { Models } from 'cucumber-html-report-generator';
 import { fileExists } from './fileExists';
 import path from 'path';
@@ -36,41 +37,51 @@ describe( 'reporter', () => {
         it( 'should verify initial properties', () => {
             expect( tmpReporter.options ).toMatchSnapshot();
             expect( tmpReporter.instanceMetadata ).toBeNull();
+            tmpReporter.onRunnerStart( FULL_RUNNER_STATS );
+            expect( tmpReporter.report ).toMatchSnapshot();
+            tmpReporter.report = {
+                'feature':{
+                    'elements': [],
+                } } ;
+
             expect( tmpReporter.report ).toMatchSnapshot();
         } );
     } );
 
     describe( 'onRunnerStart', () => {
-        // it( 'should set instance data if it is not available yet', () => {
-        //     const metadata = { foo: 'bar' };
-        //     const metadataClassObject: Metadata = tmpReporter.metadataClassObject;
-        //     const determineMetadataSpy: jest.SpyInstance = jest.spyOn( metadataClassObject, 'determineMetadata' ).mockReturnValue( metadata );
+        it( 'should set instance data if it is not available yet', () => {
+            const metadata = <Models.Metadata[]>[{ name: 'browser', value: 'chrome 85' }];
+            const metadataClassObject: Metadata = tmpReporter.metadataClassObject;
+            const determineMetadataSpy: jest.SpyInstance = jest.spyOn( metadataClassObject, 'determineMetadata' ).mockReturnValue( metadata );
 
-        //     expect( tmpReporter.instanceMetadata ).toBeNull();
+            expect( tmpReporter.instanceMetadata ).toBeNull();
 
-        //     tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
+            tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
 
-        //     expect( determineMetadataSpy ).toHaveBeenCalled();
-        //     expect( tmpReporter.instanceMetadata ).toEqual( metadata );
-        // } );
+            expect( determineMetadataSpy ).toHaveBeenCalled();
+            expect( tmpReporter.instanceMetadata ).toEqual( metadata );
+        } );
 
-        // it( 'should set not set instance data if it is already available', () => {
-        //     const metadata = { foo: 'bar' };
-        //     const determineMetadataSpy: jest.SpyInstance = jest.spyOn( new Metadata(), 'determineMetadata' ).mockReturnValue( metadata );
+        it( 'should set not set instance data if it is already available', () => {
+            const metadata = <Models.Metadata[]>[{ name: 'browser', value: 'chrome 85' }];
+            const determineMetadataSpy: jest.SpyInstance = jest.spyOn( new Metadata(), 'determineMetadata' ).mockReturnValue( metadata );
 
-        //     tmpReporter.instanceMetadata = metadata;
-        //     expect( tmpReporter.instanceMetadata ).toEqual( metadata );
+            tmpReporter.instanceMetadata = metadata;
+            expect( tmpReporter.instanceMetadata ).toEqual( metadata );
 
-        //     tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
+            tmpReporter.onRunnerStart( {} as RunnerStatsExtended );
 
-        //     expect( determineMetadataSpy ).not.toHaveBeenCalled();
-        // } );
+            expect( determineMetadataSpy ).not.toHaveBeenCalled();
+        } );
     } );
 
     describe( 'onSuiteStart', () => {
         it( 'should add the CucumberJS feature object if it is not available', () => {
             tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, 'en', language );
             expect( tmpReporter.report ).toMatchSnapshot();
+            tmpReporter.report = <Report>{
+                feature: {}
+            };
 
             tmpReporter.onSuiteStart( { keyword: 'feature', title: 'test', uid: '' } as SuiteStatsExtended );
 
@@ -93,14 +104,11 @@ describe( 'reporter', () => {
         // } );
 
         it( 'should add a scenario to the feature if the feature is already there', () => {
-            tmpReporter.report = <Report>{
-                feature: {
-                    elements: [] as Scenario[]
-                }
-            };
+            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, 'en', language );
+
             // tmpReporter.report.feature = EMPTY_FEATURE;
-            expect( tmpReporter.report.feature.elements.length ).toEqual( 0 );
-            tmpReporter.onSuiteStart( { title: '', uid: '' } as SuiteStatsExtended );
+            expect( tmpReporter.report.feature?.elements?.length ).toBe( undefined );
+            tmpReporter.onSuiteStart( { keyword: 'feature', title: 'test', uid: '' } as SuiteStatsExtended );
             expect( tmpReporter.report.feature.elements ).toMatchSnapshot();
         } );
     } );
@@ -258,12 +266,13 @@ describe( 'reporter', () => {
     describe( 'onRunnerEnd', () => {
         it( 'should store the json file on the file system', async () => {
             const outputFolder = path.join( process.cwd(),'./.tmp/output' );
+            const reportFolder = path.join( process.cwd(),'./.tmp/report' );
             const jsonFile = `${outputFolder}/this-feature.json`;
 
             removeSync( outputFolder );
             expect( fileExists( outputFolder ) ).toEqual( false );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder }, 'en' );
+            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath: reportFolder }, 'en' );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             await tmpReporter.onRunnerEnd();
@@ -271,11 +280,12 @@ describe( 'reporter', () => {
             const files = readdirSync( outputFolder );
 
             expect( files.length ).toEqual( 1 );
-            expect( files[0].includes( tmpReporter.report.feature.id ) ).toEqual( true );
+            expect( files[0].includes( `${tmpReporter.report.feature.id}.json` ) ).toEqual( true );
             expect( fileExists( jsonFile ) ).toEqual( true );
 
             // Clean up
             removeSync( outputFolder );
+            removeSync( reportFolder );
         } );
 
         it( 'should be able to add json to an existing json output', async () => {
@@ -284,7 +294,7 @@ describe( 'reporter', () => {
             removeSync( outputFolder );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
 
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder }, 'en' );
+            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath: './.tmp' }, 'en' );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );

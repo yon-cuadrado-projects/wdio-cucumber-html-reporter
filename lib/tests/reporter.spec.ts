@@ -25,7 +25,7 @@ describe( 'reporter', () => {
     } );
 
     beforeEach( () => {
-        tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, 'en' );
+        tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, language );
     } );
 
     describe( 'on create', () => {
@@ -77,7 +77,7 @@ describe( 'reporter', () => {
 
     describe( 'onSuiteStart', () => {
         it( 'should add the CucumberJS feature object if it is not available', () => {
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, 'en', language );
+            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, language, logFilePath );
             expect( tmpReporter.report ).toMatchSnapshot();
             tmpReporter.report = <Report>{
                 feature: {}
@@ -88,23 +88,8 @@ describe( 'reporter', () => {
             expect( tmpReporter.report ).toMatchSnapshot();
         } );
 
-        // it( 'should add instance data to the feature if the feature is already there', () => {
-        //     const metadata = { foo: 'bar' };
-        //     tmpReporter = new CucumberHtmlJsonReporter( null, 'en', language );
-
-        //     expect( tmpReporter.report ).toMatchSnapshot();
-
-        //     tmpReporter.instanceMetadata = metadata;
-        //     tmpReporter.report.feature = EMPTY_FEATURE;
-
-        //     tmpReporter.report.feature.elements = undefined;
-        //     tmpReporter.onSuiteStart( { title: '', uid: '' } as SuiteStatsExtended );
-
-        //     expect( tmpReporter.report ).toMatchSnapshot();
-        // } );
-
         it( 'should add a scenario to the feature if the feature is already there', () => {
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, 'en', language );
+            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, language, logFilePath );
 
             // tmpReporter.report.feature = EMPTY_FEATURE;
             expect( tmpReporter.report.feature?.elements?.length ).toBe( undefined );
@@ -358,20 +343,10 @@ describe( 'reporter', () => {
                     }]
                 }
             };
-            // const pendingStep = { foo: 'current-step', status: PENDING };
-            // const getCurrentStepSpy = jest.spyOn( steps, 'getCurrentStep' ).mockReturnValue( pendingStep );
 
-            // tmpReporter.report.feature = EMPTY_FEATURE;
-            // tmpReporter.report.feature.elements.push( EMPTY_SCENARIO );
-            // tmpReporter.report.feature.elements[0].steps.push( pendingStep );
-
-            // expect( tmpReporter.report.feature.elements[0].steps[0] ).toMatchSnapshot();
-            // const currentScenario = {};
             tmpReporter.cucumberJsAttachment( { data: 'foo', type: 'type/string' } );
-            // steps.cucumberJsAttachment( null, currentScenario );
 
             expect( tmpReporter.report.feature.elements[0].steps[0] ).toMatchSnapshot();
-            // expect( getCurrentStepSpy ).toHaveBeenCalledTimes( 1 );
         } );
 
         it( 'should be able to add embeddings to a current step which already has embeddings', () => {
@@ -401,17 +376,11 @@ describe( 'reporter', () => {
                 }
             };
 
-            // tmpReporter.report.feature = EMPTY_FEATURE;
-            // tmpReporter.report.feature.elements.push( EMPTY_SCENARIO );
-            // tmpReporter.report.feature.elements[0].steps.push( pendingStep );
             tmpReporter.cucumberJsAttachment( { data: 'data-2', type: 'mime_type-2' } );
-            // CucumberHtmlJsonReporter.attach( 'data-2', 'mime_type-2' );
             expect( tmpReporter.report.feature.elements[0].steps[0] ).toMatchSnapshot();
             tmpReporter.cucumberJsAttachment( { data: 'data-2', type: 'mime_type-2' } );
-            // CucumberHtmlJsonReporter.attach( 'data-2', 'mime_type-2' );
 
             expect( tmpReporter.report.feature.elements[0].steps[0] ).toMatchSnapshot();
-            // expect( getCurrentStepSpy ).toHaveBeenCalledTimes( 1 );
         } );
     } );
 } );

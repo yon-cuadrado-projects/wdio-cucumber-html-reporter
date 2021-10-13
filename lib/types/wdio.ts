@@ -1,4 +1,4 @@
-import { Capabilities, Options } from '@wdio/types';
+import { Capabilities, Options, Reporters } from '@wdio/types';
 import WDIOReporterBaseOptions, { Argument, HookStats, RunnerStats, SuiteStats, Tag, TestStats } from '@wdio/reporter';
 import { WriteStream } from 'fs';
 import { cjson_metadata } from '../models';
@@ -70,6 +70,10 @@ export interface SuiteStatsExtended extends SuiteStats {
     line?: number;
     name?: string;
     id?: string;
+}
+
+export interface OptionsExtended extends Reporters.Options{
+    jsonFolder: string;
 }
 
 export interface ConfigCapabilities {

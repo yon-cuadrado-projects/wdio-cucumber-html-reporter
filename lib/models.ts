@@ -35,7 +35,6 @@ export interface MetadataObject {
     foo?: string;
 }
 
-
 export interface Report {
     feature: Feature;
 }

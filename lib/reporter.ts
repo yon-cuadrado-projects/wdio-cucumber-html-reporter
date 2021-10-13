@@ -1,21 +1,13 @@
-import {
-    AFTER,
-    BEFORE,
-    DEFAULT_JSON_FOLDER,
-    DEFAULT_LANGUAGE,
-    PASSED,
-    TEXT_PLAIN,
-} from './constants';
-import { CucumberJsAttachment, Report } from './models';
+import { AFTER, BEFORE, DEFAULT_JSON_FOLDER, DEFAULT_LANGUAGE, PASSED, TEXT_PLAIN, } from './constants';
+import { CucumberJsAttachment, Feature, Report } from './models';
+import { HookStatsExtended, OptionsExtended } from './types/wdio';
 import { Models, generateReport } from 'cucumber-html-report-generator';
 import WDIOReporter, { HookStats, RunnerStats, SuiteStats, TestStats } from '@wdio/reporter';
 import { addStepData, containsSteps, updateStepStatus } from './steps';
 import { dirname, resolve } from 'path';
 import { existsSync, outputJsonSync, readJsonSync } from 'fs-extra';
 import { getCurrentScenario, getScenarioDataObject } from './scenarios';
-import { HookStatsExtended } from './types/wdio';
 import { Metadata } from './metadata';
-import { Reporters } from '@wdio/types';
 import { getFeatureDataObject } from './features';
 import logger from '@wdio/logger';
 
@@ -23,7 +15,7 @@ const log = logger( 'wdio-cucumber-html-reporter' );
 
 export class CucumberHtmlJsonReporter extends WDIOReporter {
     public language: string;
-    public options: Partial<Reporters.Options>;
+    public options: Partial<OptionsExtended>;
     public reporterName: string;
     public instanceMetadata: Models.Metadata[];
     public report: Report;
@@ -31,15 +23,11 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     public reportProperties: Models.ReportGeneration;
 
     public constructor( reportProperties: Models.ReportGeneration, language?: string, logFile?: string ) {
-        const options = <Partial<Reporters.Options>>{};
+        const options = <Partial<OptionsExtended>>{};
         options.outputDir = reportProperties?.reportPath;
         options.logFile = logFile ?? `${process.cwd()}/.tmp/logFile.json`;
         options.jsonFolder = reportProperties?.jsonDir ?? DEFAULT_JSON_FOLDER;
 
-        // if ( !options.jsonFolder ) {
-        //     options.jsonFolder = DEFAULT_JSON_FOLDER;
-        //     log.info( `The 'jsonFolder' was not set, it has been set to the default '${DEFAULT_JSON_FOLDER}'` );
-        // }
         super( options );
         if ( !language ) {
             this.language = DEFAULT_LANGUAGE;
@@ -234,7 +222,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
         const jsonFile = resolve( jsonFolder, `${this.report.feature.id}.json` );
         const json = [this.report.feature];
         // Check if there is an existing file, if so concat the data, else add the new
-        const output = existsSync( jsonFile ) ? json.concat( readJsonSync( jsonFile ) ) : json;
+        const output = existsSync( jsonFile ) ? json.concat( <Feature>readJsonSync( jsonFile ) ) : json;
         outputJsonSync( jsonFile, output );
         this.reportProperties.jsonDir = dirname( jsonFile );
         await generateReport.generate( this.reportProperties );

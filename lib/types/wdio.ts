@@ -73,7 +73,8 @@ export interface SuiteStatsExtended extends SuiteStats {
 }
 
 export interface OptionsExtended extends Reporters.Options{
-    jsonFolder: string;
+    // jsonFolder: string;
+    language: string;
 }
 
 export interface ConfigCapabilities {

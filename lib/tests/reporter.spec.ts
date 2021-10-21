@@ -12,7 +12,7 @@ import path from 'path';
 
 describe( 'reporter', () => {
     let tmpReporter: CucumberHtmlJsonReporter = null;
-    const logFolder = '.tmp';
+    const logFolder = './.tmp';
     const logFileName = 'logFile.json';
     const logFolderPath = path.join( __dirname, '../../', logFolder );
     const logFilePath = path.join( logFolderPath, logFileName );
@@ -25,12 +25,12 @@ describe( 'reporter', () => {
     } );
 
     beforeEach( () => {
-        tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, language );
+        tmpReporter = new CucumberHtmlJsonReporter( { outputDir: './.tmp', jsonFolder: './tmp/jsons' } );
     } );
 
     describe( 'on create', () => {
         it( 'should set the defaults only if the reportProperties option is provided', () => {
-            const noOptionsReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: './tmp' } );
+            const noOptionsReporter = new CucumberHtmlJsonReporter( { outputDir: 'tmp', jsonFolder: './tmp/jsons' } );
             expect( noOptionsReporter.options ).toMatchSnapshot();
         } );
 
@@ -77,7 +77,7 @@ describe( 'reporter', () => {
 
     describe( 'onSuiteStart', () => {
         it( 'should add the CucumberJS feature object if it is not available', () => {
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, language, logFilePath );
+            tmpReporter = new CucumberHtmlJsonReporter( { language, logFilePath } );
             expect( tmpReporter.report ).toMatchSnapshot();
             tmpReporter.report = <Report>{
                 feature: {}
@@ -89,7 +89,7 @@ describe( 'reporter', () => {
         } );
 
         it( 'should add a scenario to the feature if the feature is already there', () => {
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{}, language, logFilePath );
+            tmpReporter = new CucumberHtmlJsonReporter( { outputDir: './tmp', language, logFilePath } );
 
             // tmpReporter.report.feature = EMPTY_FEATURE;
             expect( tmpReporter.report.feature?.elements?.length ).toBe( undefined );
@@ -249,7 +249,7 @@ describe( 'reporter', () => {
     } );
 
     describe( 'onRunnerEnd', () => {
-        it( 'should store the json file on the file system', async () => {
+        it( 'should store the json file on the file system', () => {
             const outputFolder = path.join( process.cwd(),'./.tmp/output' );
             const reportFolder = path.join( process.cwd(),'./.tmp/report' );
             const jsonFile = `${outputFolder}/this-feature.json`;
@@ -257,10 +257,10 @@ describe( 'reporter', () => {
             removeSync( outputFolder );
             expect( fileExists( outputFolder ) ).toEqual( false );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath: reportFolder }, 'en' );
+            tmpReporter = new CucumberHtmlJsonReporter( { outputFolder, reportFolder, language } );
             tmpReporter.report.feature = { id: 'this-feature' };
 
-            await tmpReporter.onRunnerEnd();
+            tmpReporter.onRunnerEnd();
 
             const files = readdirSync( outputFolder );
 
@@ -273,22 +273,22 @@ describe( 'reporter', () => {
             removeSync( reportFolder );
         } );
 
-        it( 'should be able to add json to an existing json output', async () => {
+        it( 'should be able to add json to an existing json output', () => {
             const outputFolder = path.join( process.cwd(),'./.tmp/output' );
             const jsonFile = `${outputFolder}/mock.json`;
             removeSync( outputFolder );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
 
-            tmpReporter = new CucumberHtmlJsonReporter( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath: './.tmp' }, 'en' );
+            tmpReporter = new CucumberHtmlJsonReporter( { outputFolder, outputDir: outputFolder, language } );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );
 
-            await tmpReporter.onRunnerEnd();
+            tmpReporter.onRunnerEnd();
 
             const files = readdirSync( outputFolder );
 
-            expect( files.length ).toEqual( 2 );
+            expect( files.length ).toEqual( 3 );
             expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );
 
             // Clean up
@@ -381,6 +381,39 @@ describe( 'reporter', () => {
             tmpReporter.cucumberJsAttachment( { data: 'data-2', type: 'mime_type-2' } );
 
             expect( tmpReporter.report.feature.elements[0].steps[0] ).toMatchSnapshot();
+        } );
+    } );
+
+    describe( 'attach', () => {
+        let mockStdout: jest.SpyInstance;
+        beforeAll( () => {
+            process.emit = jest.fn();
+            mockStdout = jest.spyOn( process, 'emit' ).mockImplementation();
+        } );
+
+        afterEach( () => {
+            //   process.emit.mockClear();
+            mockStdout.mockClear();
+        } );
+
+        it( 'should be able to generate a report', async () => {
+
+        } );
+    } );
+
+    describe( 'generateReport', () => {
+        it( 'should be able to generate a report', async () => {
+            const outputFolder = path.join( process.cwd(),'lib/tests/__mocks__' );
+            const reportPath = path.join( process.cwd(),'./.tmp/report' ) ;
+            fs.mkdirSync( reportPath , { recursive: true } );
+            tmpReporter = new CucumberHtmlJsonReporter( { outputFolder, reportPath, language } );
+            await CucumberHtmlJsonReporter.generateHtmlReport( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath } );
+            const files = readdirSync( reportPath );
+
+            expect( files.length ).toEqual( 3 );
+
+            // Clean up
+            removeSync( reportPath );
         } );
     } );
 } );

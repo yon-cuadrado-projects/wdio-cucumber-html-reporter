@@ -81,17 +81,19 @@ Object {
 
 exports[`reporter on create should set the defaults only if the reportProperties option is provided 1`] = `
 Object {
-  "jsonFolder": "./tmp",
-  "logFile": "/mnt/ARCHIVING2/GIT/projects/0.webdriverio/wdio-html-reporter/.tmp/logFile.json",
-  "outputDir": undefined,
+  "jsonFolder": "./tmp/jsons",
+  "language": "en",
+  "logFile": "tmp/logFile.json",
+  "outputDir": "tmp",
 }
 `;
 
 exports[`reporter on create should verify initial properties 1`] = `
 Object {
-  "jsonFolder": ".tmp/json/",
-  "logFile": "/mnt/ARCHIVING2/GIT/projects/0.webdriverio/wdio-html-reporter/.tmp/logFile.json",
-  "outputDir": undefined,
+  "jsonFolder": "./tmp/jsons",
+  "language": "en",
+  "logFile": "./.tmp/logFile.json",
+  "outputDir": "./.tmp",
 }
 `;
 
@@ -156,7 +158,7 @@ exports[`reporter onSuiteStart should add the CucumberJS feature object if it is
 exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 2`] = `
 Object {
   "feature": Object {
-    "metadata": Object {},
+    "metadata": null,
   },
 }
 `;

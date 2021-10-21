@@ -4,17 +4,17 @@ import { HookStatsExtended, OptionsExtended } from './types/wdio';
 import { Models, generateReport } from 'cucumber-html-report-generator';
 import WDIOReporter, { HookStats, RunnerStats, SuiteStats, TestStats } from '@wdio/reporter';
 import { addStepData, containsSteps, updateStepStatus } from './steps';
-import { dirname, resolve } from 'path';
 import { existsSync, outputJsonSync, readJsonSync } from 'fs-extra';
 import { getCurrentScenario, getScenarioDataObject } from './scenarios';
 import { Metadata } from './metadata';
 import { getFeatureDataObject } from './features';
 import logger from '@wdio/logger';
+import { resolve } from 'path';
 
 const log = logger( 'wdio-cucumber-html-reporter' );
 
 export class CucumberHtmlJsonReporter extends WDIOReporter {
-    public language: string;
+    // public language: string;
     public options: Partial<OptionsExtended>;
     public reporterName: string;
     public instanceMetadata: Models.Metadata[];
@@ -22,22 +22,18 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     public metadataClassObject: Metadata;
     public reportProperties: Models.ReportGeneration;
 
-    public constructor( reportProperties: Models.ReportGeneration, language?: string, logFile?: string ) {
-        const options = <Partial<OptionsExtended>>{};
-        options.outputDir = reportProperties?.reportPath;
-        options.logFile = logFile ?? `${process.cwd()}/.tmp/logFile.json`;
-        options.jsonFolder = reportProperties?.jsonDir ?? DEFAULT_JSON_FOLDER;
+    public constructor( options: Partial<OptionsExtended> ) {
+        // const options = <Partial<OptionsExtended>>{};
 
+        options.outputDir = options?.outputDir ?? resolve( process.cwd(), DEFAULT_JSON_FOLDER );
+        options.logFile = options.logFile ?? `${options?.outputDir}/logFile.json`;
         super( options );
-        if ( !language ) {
-            this.language = DEFAULT_LANGUAGE;
+
+        if ( !options?.language ) {
+            options.language = DEFAULT_LANGUAGE;
             log.info( `The 'language' was not set, it has been set to the default '${DEFAULT_LANGUAGE}'` );
-        } else {
-            this.language = language;
         }
 
-        this.reportProperties = reportProperties;
-        this.reportProperties.jsonDir = reportProperties?.jsonDir ?? `./${DEFAULT_JSON_FOLDER}`;
         this.options = options;
         this.instanceMetadata = null;
         this.report = <Report>{};
@@ -46,23 +42,20 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
         this.metadataClassObject = new Metadata();
     }
 
-    /**
-     * Attach data to the report
-     *
-     * @param {string|object} data
-     * @param {string} type Default is `text/plain`, otherwise what people deliver as a MIME type, like `application/json`, `image/png`
-     */
     public static attach ( data: string, type = TEXT_PLAIN ): void {
-
         // eslint-disable-next-line @typescript-eslint/ban-types
         ( process.emit as Function )( 'wdioCucumberHtmlReporter:attachment', { data, type } );
     }
 
-    /**
-     * Add a customer listener for the attachments
-     */
+    public static async generateHtmlReport ( reportProperties: Models.ReportGeneration ): Promise<void> {
+        // // eslint-disable-next-line @typescript-eslint/ban-types
+        // await ( process.emit as Function )( 'wdioCucumberHtmlReporter:reportGeneration', reportProperties );
+        await generateReport.generate( reportProperties );
+    }
+
     public registerListeners (): void {
         process.on( 'wdioCucumberHtmlReporter:attachment', this.cucumberJsAttachment.bind( this ) );
+        // process.on( 'wdioCucumberHtmlReporter:reportGeneration', this.htmlReportGeneration.bind( this ) );
     }
 
     /**
@@ -83,24 +76,12 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
      * - onRunnerEnd
      */
 
-    /**
-     * This hook is used to retrieve the browser data, but this is done only once
-     *
-     * @param {object} runnerData
-     */
     public onRunnerStart ( runnerData: RunnerStats ): void {
         if ( !this.instanceMetadata ) {
             this.instanceMetadata = this.metadataClassObject.determineMetadata( runnerData );
         }
     }
 
-    /**
-     * This hook is called twice:
-     * 1. create the feature
-     * 2. add the scenario to the feature
-     *
-     * @param {object} payload
-     */
     public onSuiteStart ( payload: SuiteStats ): void {
         if ( !this.report.feature ) {
             this.report.feature = getFeatureDataObject( payload );
@@ -108,7 +89,8 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
 
         /* istanbul ignore else */
         if ( !this.report.feature.metadata ) {
-            this.report.feature = { ...this.report.feature, metadata: { ...this.instanceMetadata } };
+            this.report.feature.metadata = this.instanceMetadata;
+            // this.report.feature = { ...this.report.feature, metadata: { ...this.instanceMetadata } };
         }
 
         if ( typeof this.report.feature.elements !== 'undefined' ) {
@@ -126,9 +108,9 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
         // There is always a scenario, take the last one
         const currentSteps = getCurrentScenario( this.report ).steps;
         payload.state = PASSED;
-        payload.keyword = containsSteps( currentSteps, this.language ) ? AFTER : BEFORE;
+        payload.keyword = containsSteps( currentSteps, this.options.language ) ? AFTER : BEFORE;
 
-        addStepData( payload, this.report, this.language );
+        addStepData( payload, this.report, this.options.language );
     }
 
     /**
@@ -140,7 +122,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     public onHookEnd ( payload: HookStats ): void {
         payload.state = payload.error ? payload.state : PASSED;
 
-        return updateStepStatus( payload, this.report, this.language );
+        return updateStepStatus( payload, this.report, this.options.language );
     }
 
     /**
@@ -149,7 +131,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
      * @param {object} payload
      */
     public onTestStart ( payload: TestStats ): void {
-        addStepData( payload, this.report, this.language );
+        addStepData( payload, this.report, this.options.language );
     }
 
     // /**
@@ -180,7 +162,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
      * @param payload
      */
     public onTestPass ( payload: TestStats ): void {
-        updateStepStatus( payload, this.report, this.language );
+        updateStepStatus( payload, this.report, this.options.language );
     }
 
     /**
@@ -189,7 +171,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
      * @param payload
      */
     public onTestFail ( payload: TestStats ): void {
-        updateStepStatus( payload, this.report, this.language );
+        updateStepStatus( payload, this.report, this.options.language );
     }
 
     /**
@@ -198,7 +180,7 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
      * @param payload
      */
     public onTestSkip ( payload: TestStats ): void {
-        updateStepStatus( payload, this.report, this.language );
+        updateStepStatus( payload, this.report, this.options.language );
     }
 
     // onTestEnd(payload) {
@@ -217,15 +199,13 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
     /**
      * Runner is done, write the file
      */
-    public async onRunnerEnd (): Promise<void> {
-        const jsonFolder = resolve( process.cwd(), this.options.jsonFolder );
+    public onRunnerEnd (): void {
+        const jsonFolder = resolve( process.cwd(), this.options.outputDir );
         const jsonFile = resolve( jsonFolder, `${this.report.feature.id}.json` );
         const json = [this.report.feature];
         // Check if there is an existing file, if so concat the data, else add the new
         const output = existsSync( jsonFile ) ? json.concat( <Feature>readJsonSync( jsonFile ) ) : json;
         outputJsonSync( jsonFile, output );
-        this.reportProperties.jsonDir = dirname( jsonFile );
-        await generateReport.generate( this.reportProperties );
     }
 
     /**
@@ -250,6 +230,10 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
             currentStep.embeddings.push( embeddings );
         }
     }
+
+    // public async htmlReportGeneration( reportProperties: Models.ReportGeneration ): Promise<void>{
+    //     await generateReport.generate( reportProperties );
+    // }
 }
 
 // CucumberJsJsonReporter.name = 'cucumberjs-json';

@@ -250,27 +250,30 @@ describe( 'reporter', () => {
 
     describe( 'onRunnerEnd', () => {
         it( 'should store the json file on the file system', () => {
-            const outputFolder = path.join( process.cwd(),'./.tmp/output' );
-            const reportFolder = path.join( process.cwd(),'./.tmp/report' );
-            const jsonFile = `${outputFolder}/this-feature.json`;
+            const outputDir = path.join( process.cwd(),'./.tmp/output/' );
+            const logFileFolder = path.join( process.cwd(),'./.tmp/logfile' );
+            fs.mkdirSync( outputDir );
+            fs.mkdirSync( logFileFolder );
+            const jsonFile = `${outputDir}/this-feature.json`;
+            const logFile = `${logFileFolder}/logFile.json`;
 
-            removeSync( outputFolder );
-            expect( fileExists( outputFolder ) ).toEqual( false );
+            // emptyDirSync( outputFolder );
+            // expect( fileExists( outputFolder ) ).toEqual( false );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
-            tmpReporter = new CucumberHtmlJsonReporter( { outputFolder, reportFolder, language } );
+            tmpReporter = new CucumberHtmlJsonReporter( { outputDir, logFile, language } );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             tmpReporter.onRunnerEnd();
 
-            const files = readdirSync( outputFolder );
+            const files = readdirSync( outputDir );
 
             expect( files.length ).toEqual( 1 );
             expect( files[0].includes( `${tmpReporter.report.feature.id}.json` ) ).toEqual( true );
             expect( fileExists( jsonFile ) ).toEqual( true );
 
             // Clean up
-            removeSync( outputFolder );
-            removeSync( reportFolder );
+            removeSync( outputDir );
+            removeSync( logFileFolder );
         } );
 
         it( 'should be able to add json to an existing json output', () => {
@@ -384,29 +387,11 @@ describe( 'reporter', () => {
         } );
     } );
 
-    describe( 'attach', () => {
-        let mockStdout: jest.SpyInstance;
-        beforeAll( () => {
-            process.emit = jest.fn();
-            mockStdout = jest.spyOn( process, 'emit' ).mockImplementation();
-        } );
-
-        afterEach( () => {
-            //   process.emit.mockClear();
-            mockStdout.mockClear();
-        } );
-
-        it( 'should be able to generate a report', async () => {
-
-        } );
-    } );
-
     describe( 'generateReport', () => {
         it( 'should be able to generate a report', async () => {
             const outputFolder = path.join( process.cwd(),'lib/tests/__mocks__' );
             const reportPath = path.join( process.cwd(),'./.tmp/report' ) ;
             fs.mkdirSync( reportPath , { recursive: true } );
-            tmpReporter = new CucumberHtmlJsonReporter( { outputFolder, reportPath, language } );
             await CucumberHtmlJsonReporter.generateHtmlReport( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath } );
             const files = readdirSync( reportPath );
 

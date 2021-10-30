@@ -1,6 +1,6 @@
 {
   "name": "wdio-reporter-html",
-  "version": "0.0.8",
+  "version": "0.0.12",
   "description": "A WDIO reporter that creates CucumberJS JSON files for WebdriverIO V5+",
   "main": "./dist/reporter.js",
   "types": "./dist/reporter.d.ts",
@@ -45,10 +45,11 @@
   "dependencies": {
     "@cucumber/gherkin": "~22.0.0",
     "@wdio/logger": "~7.16.0",
-    "@wdio/reporter": "^7.16.1"
+    "@wdio/reporter": "^7.16.3",
+    "cucumber-html-report-generator": "0.0.12"
   },
   "peerDependencies": {
-    "@wdio/cucumber-framework": "~7.16.1"
+    "@wdio/cucumber-framework": "~7.16.3"
   },
   "devDependencies": {
     "@tsconfig/node12": "^1.0.9",
@@ -56,20 +57,19 @@
     "@types/jest": "^27.0.2",
     "@types/long": "^4.0.1",
     "@types/node": "^15.14.9",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^5.1.0",
-    "@typescript-eslint/parser": "^5.1.0",
-    "@wdio/cucumber-framework": "~7.16.1",
-    "@wdio/types": "^7.16.1",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
+    "@wdio/cucumber-framework": "~7.16.3",
+    "@wdio/types": "^7.16.3",
     "babel-eslint": "^10.1.0",
     "babel-plugin-transform-function-bind": "^6.22.0",
     "coveralls": "^3.1.1",
-    "cucumber-html-report-generator": "0.0.9",
     "cucumber-messages": "^8.0.0",
-    "eslint": "^8.0.1",
+    "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-jsdoc": "^36.1.1",
+    "eslint-plugin-jsdoc": "^37.0.3",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-tslint": "^3.1.0",
@@ -83,7 +83,7 @@
     "ts-jest": "^27.0.7",
     "tslint": "^6.1.3",
     "typescript": "^4.4.4",
-    "webdriverio": "^7.16.2",
+    "webdriverio": "^7.16.3",
     "yargs": "^17.2.1"
   },
   "husky": {

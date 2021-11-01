@@ -3,7 +3,7 @@ import { DEFAULT_LANGUAGE, FAILED, PASSED, PENDING, TEXT_PLAIN } from '../consta
 import { HookStatsExtended, RunnerStatsExtended, SuiteStatsExtended, TestStatsExtended } from '../types/wdio';
 import { Report, Scenario } from '../models';
 import { copySync, readJsonSync, readdirSync, removeSync } from 'fs-extra';
-import CucumberHtmlJsonReporter from '../reporter';
+import CucumberHtmlReporter from '../reporter';
 import { FULL_RUNNER_STATS } from './__mocks__/mocks';
 import { Metadata } from '../metadata';
 import type { Models } from 'cucumber-html-report-generator';
@@ -11,7 +11,7 @@ import { fileExists } from './fileExists';
 import path from 'path';
 
 describe( 'reporter', () => {
-    let tmpReporter: CucumberHtmlJsonReporter = null;
+    let tmpReporter: CucumberHtmlReporter = null;
     const logFolder = './.tmp';
     const logFileName = 'logFile.json';
     const logFolderPath = path.join( __dirname, '../../', logFolder );
@@ -25,12 +25,12 @@ describe( 'reporter', () => {
     } );
 
     beforeEach( () => {
-        tmpReporter = new CucumberHtmlJsonReporter( { outputDir: './.tmp', jsonFolder: './tmp/jsons' } );
+        tmpReporter = new CucumberHtmlReporter( { outputDir: './.tmp', jsonFolder: './tmp/jsons' } );
     } );
 
     describe( 'on create', () => {
         it( 'should set the defaults only if the reportProperties option is provided', () => {
-            const noOptionsReporter = new CucumberHtmlJsonReporter( { outputDir: 'tmp', jsonFolder: './tmp/jsons' } );
+            const noOptionsReporter = new CucumberHtmlReporter( { outputDir: 'tmp', jsonFolder: './tmp/jsons' } );
             expect( noOptionsReporter.options ).toMatchSnapshot();
         } );
 
@@ -77,7 +77,7 @@ describe( 'reporter', () => {
 
     describe( 'onSuiteStart', () => {
         it( 'should add the CucumberJS feature object if it is not available', () => {
-            tmpReporter = new CucumberHtmlJsonReporter( { language, logFilePath } );
+            tmpReporter = new CucumberHtmlReporter( { language, logFilePath } );
             expect( tmpReporter.report ).toMatchSnapshot();
             tmpReporter.report = <Report>{
                 feature: {}
@@ -89,7 +89,7 @@ describe( 'reporter', () => {
         } );
 
         it( 'should add a scenario to the feature if the feature is already there', () => {
-            tmpReporter = new CucumberHtmlJsonReporter( { outputDir: './tmp', language, logFilePath } );
+            tmpReporter = new CucumberHtmlReporter( { outputDir: './tmp', language, logFilePath } );
 
             // tmpReporter.report.feature = EMPTY_FEATURE;
             expect( tmpReporter.report.feature?.elements?.length ).toBe( undefined );
@@ -260,7 +260,7 @@ describe( 'reporter', () => {
             // emptyDirSync( outputFolder );
             // expect( fileExists( outputFolder ) ).toEqual( false );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
-            tmpReporter = new CucumberHtmlJsonReporter( { outputDir, logFile, language } );
+            tmpReporter = new CucumberHtmlReporter( { outputDir, logFile, language } );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             tmpReporter.onRunnerEnd();
@@ -282,7 +282,7 @@ describe( 'reporter', () => {
             removeSync( outputFolder );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
 
-            tmpReporter = new CucumberHtmlJsonReporter( { outputFolder, outputDir: outputFolder, language } );
+            tmpReporter = new CucumberHtmlReporter( { outputFolder, outputDir: outputFolder, language } );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );
@@ -312,7 +312,7 @@ describe( 'reporter', () => {
         } );
 
         it( 'should be able to attach default data', () => {
-            CucumberHtmlJsonReporter.attach( 'foo' );
+            CucumberHtmlReporter.attach( 'foo' );
 
             expect( mockStdout ).toHaveBeenCalledTimes( 1 );
             expect( mockStdout ).toHaveBeenCalledWith( 'wdioCucumberHtmlReporter:attachment', {
@@ -322,7 +322,7 @@ describe( 'reporter', () => {
         } );
 
         it( 'should be able to attach with all data', () => {
-            CucumberHtmlJsonReporter.attach( 'foo', 'type/string' );
+            CucumberHtmlReporter.attach( 'foo', 'type/string' );
 
             expect( mockStdout ).toHaveBeenCalledTimes( 1 );
             expect( mockStdout ).toHaveBeenCalledWith( 'wdioCucumberHtmlReporter:attachment', {
@@ -392,7 +392,7 @@ describe( 'reporter', () => {
             const outputFolder = path.join( process.cwd(),'lib/tests/__mocks__' );
             const reportPath = path.join( process.cwd(),'./.tmp/report' ) ;
             fs.mkdirSync( reportPath , { recursive: true } );
-            await CucumberHtmlJsonReporter.generateHtmlReport( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath } );
+            await CucumberHtmlReporter.generateHtmlReport( <Models.ReportGeneration>{ jsonDir: outputFolder, reportPath } );
             const files = readdirSync( reportPath );
 
             expect( files.length ).toEqual( 3 );

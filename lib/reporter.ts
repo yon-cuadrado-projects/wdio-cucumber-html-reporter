@@ -13,7 +13,7 @@ import { resolve } from 'path';
 
 const log = logger( 'wdio-cucumber-html-reporter' );
 
-export class CucumberHtmlJsonReporter extends WDIOReporter {
+export class CucumberHtmlReporter extends WDIOReporter {
     // public language: string;
     public options: Partial<OptionsExtended>;
     public reporterName: string;
@@ -230,11 +230,6 @@ export class CucumberHtmlJsonReporter extends WDIOReporter {
             currentStep.embeddings.push( embeddings );
         }
     }
-
-    // public async htmlReportGeneration( reportProperties: Models.ReportGeneration ): Promise<void>{
-    //     await generateReport.generate( reportProperties );
-    // }
 }
 
-// CucumberJsJsonReporter.name = 'cucumberjs-json';
-export default CucumberHtmlJsonReporter;
+export default CucumberHtmlReporter;

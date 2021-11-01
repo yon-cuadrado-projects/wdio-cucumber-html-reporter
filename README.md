@@ -1,30 +1,24 @@
-# wdio-cucumberjs-json-reporter
-A WDIO reporter that creates CucumberJS JSON files for WebdriverIO V6+
+# wdio-reporter-html
+A WDIO reporter that creates an html report using the plugin [cucumber-html-report-generator](https://github.com/yon-cuadrado-projects/cucumber-html-report-generator)
 
-[![dependencies Status](https://david-dm.org/webdriverio-community/wdio-cucumberjs-json-reporter/status.svg)](https://david-dm.org/webdriverio-community/wdio-cucumberjs-json-reporter)
-![example workflow](https://github.com/webdriverio-community/wdio-cucumberjs-json-reporter/actions/workflows/wdio-cucumberjs-json-reporter.yml/badge.svg)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-[![NPM](https://nodei.co/npm/wdio-cucumberjs-json-reporter.png)](https://nodei.co/npm/wdio-cucumberjs-json-reporter/)
+[![NPM](https://nodei.co/npm/wdio-reporter-html.png)](https://nodei.co/npm/wdio-reporter-html/)
 
 > **THIS MODULE CAN ONLY WORK WITH WebdriverIO V7+!**\
-> **For V6 please check the docs [here](https://github.com/webdriverio-community/wdio-cucumberjs-json-reporter/tree/v6) and use version 2.0.4**\
-> **For V5 please check the docs [here](https://github.com/webdriverio-community/wdio-cucumberjs-json-reporter/tree/v5) and use version 1.3.0**
-
-> **THIS MODULE IS NOT A REPLACEMENT OF [wdio-multiple-cucumber-html-reporter](https://github.com/wswebcreation/wdio-multiple-cucumber-html-reporter). THAT MODULE ONLY SUPPORTS WEBDRIVERIO V4 AND ALSO CREATES A REPORT. THIS MODULE ONLY CREATES A JSON, NO REPORT!!**
 
 ## What does it do
-This reporter will generate a **Cucumber JSON file** for each feature that is being tested. The JSON file can be used with whatever report you want to use like for example [multiple-cucumber-html-reporter](https://github.com/wswebcreation/multiple-cucumber-html-reporter).
+This reporter will generate an html file using the plugin
 
 It will also add metadata about the running instance to the feature file and last but not least, it will give you the opportunity to add attachments to the JSON output.
 
 ## Installation
-The easiest way is to keep `wdio-cucumberjs-json-reporter` as a devDependency in your `package.json`.
+The easiest way is to keep `wdio-reporter-html` as a devDependency in your `package.json`.
 
 ```json
 {
   "devDependencies": {
-    "wdio-cucumberjs-json-reporter": "^1.0.0"
+    "wdio-reporter-html": "0.0.12"
   }
 }
 ```
@@ -32,7 +26,7 @@ The easiest way is to keep `wdio-cucumberjs-json-reporter` as a devDependency in
 You can simple do it by:
 
 ```bash
-npm install wdio-cucumberjs-json-reporter --save-dev
+npm install wdio-reporter-html --save-dev
 ```
 
 so it will automatically be added to your `package.json`
@@ -40,6 +34,7 @@ so it will automatically be added to your `package.json`
 Instructions on how to install `WebdriverIO` can be found [here](http://webdriver.io/guide/getstarted/install.html).
 
 ## Configuration
+This reporter first generates the json files with the results of the execution.
 Configure the output directory and the language in your wdio.conf.js file:
 
 ```js
@@ -47,20 +42,17 @@ exports.config = {
     // ...
     reporters: [
         // Like this with the default options, see the options below
-        'cucumberjs-json',
+        CucumberHtmlReporter,
 
         // OR like this if you want to set the folder and the language
-        [ 'cucumberjs-json', {
+        [ CucumberHtmlReporter, {
                 jsonFolder: '.tmp/new/',
                 language: 'en',
             },
         ],
     ],
   // ...
-}
 ```
-
-> DON'T USE BOTH WAYS OF ADDING THE REPORTER, THIS IS JUST AN EXAMPLE!
 
 ## Options
 ### `jsonFolder`
@@ -80,14 +72,23 @@ where the script is executed. Executing it from the root of your project will al
 
 The language in which the Gherkin scenarios are written (defaults to English). The list of language codes and its keywords can be found [here](https://cucumber.io/docs/gherkin/reference/#overview).
 
+
+and then in the onComplete hook the html report is generated.The options of the generateHtmlReport method are described in the documentation of the
+[cucumber-html-report-generator doc](https://github.com/yon-cuadrado-projects/cucumber-html-report-generator/README.MD) plugin
+
+```
+    onComplete: async (): Promise<void> => {
+        await CucumberHtmlJsonReporter.generateHtmlReport({
+                jsonDir: `${path.resolve( './' )}/.tmp/json/`,
+        })
+    },
+}
+```
+
 ## Metadata
 
-> **Note:**\
-> This is currently not supported if you are using WebdriverIO V6, WebdriverIO V5 still supports this
-
-As said, this report can automatically store the metadata of the current machine / device the feature has been executed on.
-
-To customize this you can add IT by adding the following object to your `capabilities`
+This report can automatically store the metadata of the current machine / device the feature has been executed on.
+To customize this you can add it by adding the following object to your `capabilities`
 
 ```js
 // Example wdio.conf.js
@@ -118,8 +119,6 @@ exports.config = {
     ],
 };
 ```
-
-> The metadata object needs to have the `cjson` prefix, otherwise it will not work!
 
 ### Metadata values
 #### `metadata.app.name`
@@ -175,72 +174,15 @@ You have the option to attach data to the JSON file in all these hooks / steps:
 The only thing you need to provide is the following code in your step files.
 
 ```js
-import cucumberJson from 'wdio-cucumberjs-json-reporter';
+import CucumberHtmlReporter from 'wdio-reporter-html';
 
 // Attach a string (if no type is provided it will automatically default to `text/plain`
-cucumberJson.attach('just a string');
-cucumberJson.attach('just a second string', 'text/plain');
+CucumberHtmlReporter.attach('just a string');
+CucumberHtmlReporter.attach('just a second string', 'text/plain');
 
 // Attach JSON
-cucumberJson.attach({"json-string": true}, 'application/json');
+CucumberHtmlReporter.attach({"json-string": true}, 'application/json');
 
 // Attach a screenshot in a before hook
-cucumberJson.attach(browser.takeScreenshot(), 'image/png');
+CucumberHtmlReporter.attach(browser.takeScreenshot(), 'image/png');
 ```
-
-## Use it with multiple-cucumber-html-reporter
-The previous module for WebdriverIO V4, [wdio-multiple-cucumber-html-reporter](https://github.com/webdriverio-community/wdio-multiple-cucumber-html-reporter),
-had a build in connection with the [multiple-cucumber-html-reporter](https://github.com/wswebcreation/multiple-cucumber-html-reporter)-module. **This is not the case for this
-reporter** because the new setup of WebdriverIO V5 is based on a instance which doesn't allow me to use the `onPrepare` and `onComplete` hook.
-
-If you still want to use the [multiple-cucumber-html-reporter](https://github.com/wswebcreation/multiple-cucumber-html-reporter)-module you can add the following to your config file.
-
-- Install the module with
-
-    ```bash
-    npm install multiple-cucumber-html-reporter --save-dev
-    ```
-
-  Maybe even install `fs-extra` to remove the report folder before you start all  sessions.
-
-    ```bash
-    npm install fs-extra --save-dev
-    ```
-
-- Add this to your configuration file
-
-    ```js
-    // Import the module
-    const { generate } = require('multiple-cucumber-html-reporter');
-    const { removeSync } = require('fs-extra');
-
-    // Example wdio.conf.js
-    exports.config = {
-      //..
-
-      // =====
-      // Hooks
-      // =====
-      /**
-       * Gets executed once before all workers get launched.
-       */
-      onPrepare: () => {
-        // Remove the `.tmp/` folder that holds the json and report files
-        removeSync('.tmp/');
-      },
-      /**
-       * Gets executed after all workers got shut down and the process is about to exit.
-       */
-      onComplete: () => {
-        // Generate the report when it all tests are done
-        generate({
-          // Required
-          // This part needs to be the same path where you store the JSON files
-          // default = '.tmp/json/'
-          jsonDir: '.tmp/json/',
-          reportPath: '.tmp/report/',
-          // for more options see https://github.com/wswebcreation/multiple-cucumber-html-reporter#options
-        });
-      }
-    }
-    ```

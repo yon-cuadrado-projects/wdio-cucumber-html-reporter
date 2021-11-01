@@ -25,13 +25,16 @@ export class Metadata {
         }
 
         const device = this.determineDeviceName( metadataFromWdioConfiguration, currentConfigCapabilities );
-        const platform = {
-            name: this.determinePlatformName( metadataFromWdioConfiguration, currentCapabilities ),
+        const platformName = this.determinePlatformName( metadataFromWdioConfiguration, currentCapabilities );
+        const icon = this.getIcon( platformName );
+
+        const currentPlatform = {
+            name: platformName,
             version: this.determinePlatformVersion( metadataFromWdioConfiguration ),
         };
 
         featureMetadata.push( <Models.Metadata>{ name: 'device', value: device } );
-        featureMetadata.push( <Models.Metadata>{ name: 'platform', value: `${platform.name} ${platform.version}` } );
+        featureMetadata.push( <Models.Metadata>{ name: 'platform', value: `${currentPlatform.name} ${currentPlatform.version}`, icon } );
 
         return featureMetadata;
     }
@@ -48,6 +51,8 @@ export class Metadata {
                     ? 'windows'
                     : currentCapabilities.platformName
             : `Platform name ${NOT_KNOWN}`;
+
+
         return metadata?.platform?.name ?? currentPlatformName;
     }
 
@@ -74,9 +79,50 @@ export class Metadata {
             || currentCapabilities.browserVersion
             || currentConfigCapabilities.browserVersion
             || ( metadata?.browser?.version ?? 'No metadata.browser.version available' );
+        const icon = this.getIcon( browserName );
 
         return{
-            name: 'browser', value: `${browserName} ${browserVersion}`
+            name: 'browser', value: `${browserName} ${browserVersion}`, icon
         };
+    }
+
+    /* istanbul ignore next */
+    private getIcon( value: string ): string{
+        let icon = '';
+        switch( value.trim() ){
+        case 'internet explorer':
+            icon = 'fab fa-internet-explorer';
+            break;
+        case 'safari':
+            icon = 'fab fa-safari';
+            break;
+        case 'edge':
+            icon = 'fab fa-edge';
+            break;
+        case 'chrome':
+            icon = 'fab fa-chrome';
+            break;
+        case 'firefox':
+            icon = 'fab fa-firefox';
+            break;
+        case 'windows':
+            icon = 'fab fa-windows';
+            break;
+        case 'osx':
+        case 'ios':
+            icon = 'fab fa-apple';
+            break;
+        case 'linux':
+            icon = 'fab fa-linux';
+            break;
+        case 'ubuntu':
+            icon = 'fab fa-ubuntu';
+            break;
+        case 'android':
+            icon = 'fab fa-android';
+            break;
+        }
+
+        return icon;
     }
 }

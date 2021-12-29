@@ -7,7 +7,6 @@ import CucumberHtmlReporter from '../reporter';
 import { FULL_RUNNER_STATS } from './__mocks__/mocks';
 import { Metadata } from '../metadata';
 import type { Models } from 'cucumber-html-report-generator';
-import { fileExists } from './fileExists';
 import path from 'path';
 
 describe( 'reporter', () => {

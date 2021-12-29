@@ -30,7 +30,8 @@ describe( 'reporter', () => {
 
     describe( 'on create', () => {
         it( 'should set the defaults only if the reportProperties option is provided', () => {
-            const noOptionsReporter = new CucumberHtmlReporter( { outputDir: 'tmp', jsonFolder: './tmp/jsons' } );
+            removeSync( path.join( process.cwd(),'tmp1' ) );
+            const noOptionsReporter = new CucumberHtmlReporter( { outputDir: 'tmp1', jsonFolder: './tmp/jsons' } );
             expect( noOptionsReporter.options ).toMatchSnapshot();
         } );
 
@@ -250,17 +251,22 @@ describe( 'reporter', () => {
 
     describe( 'onRunnerEnd', () => {
         it( 'should store the json file on the file system', () => {
-            const outputDir = path.join( process.cwd(),'./.tmp/output/' );
+            const outputDir = path.join( process.cwd(),'./.tmp/output1/' );
+            if( fs.existsSync( outputDir ) ){
+                fs.mkdirSync( outputDir, { recursive: true } );
+            }
             const logFileFolder = path.join( process.cwd(),'./.tmp/logfile' );
-            fs.mkdirSync( outputDir );
-            fs.mkdirSync( logFileFolder );
+            if( ! fs.existsSync( logFileFolder ) ){
+                fs.mkdirSync( logFileFolder, { recursive: true } );
+            }
+            // fs.mkdirSync( outputDir );
+            // fs.mkdirSync( logFileFolder );
             const jsonFile = `${outputDir}/this-feature.json`;
             const logFile = `${logFileFolder}/logFile.json`;
+            fs.closeSync( fs.openSync( logFile, 'w' ) );
 
-            // emptyDirSync( outputFolder );
-            // expect( fileExists( outputFolder ) ).toEqual( false );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
-            tmpReporter = new CucumberHtmlReporter( { outputDir, logFile, language } );
+            tmpReporter = new CucumberHtmlReporter( { logFile, language } );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             tmpReporter.onRunnerEnd();
@@ -273,16 +279,18 @@ describe( 'reporter', () => {
 
             // Clean up
             removeSync( outputDir );
-            removeSync( logFileFolder );
         } );
 
         it( 'should be able to add json to an existing json output', () => {
             const outputFolder = path.join( process.cwd(),'./.tmp/output' );
+            if( ! fs.existsSync( outputFolder ) ){
+                fs.mkdirSync( outputFolder, { recursive: true } );
+            }
             const jsonFile = `${outputFolder}/mock.json`;
             removeSync( outputFolder );
             copySync( 'lib/tests/__mocks__/mock.json', jsonFile );
 
-            tmpReporter = new CucumberHtmlReporter( { outputFolder, outputDir: outputFolder, language } );
+            tmpReporter = new CucumberHtmlReporter( { outputDir: outputFolder, language } );
             tmpReporter.report.feature = { id: 'this-feature' };
 
             expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );
@@ -291,11 +299,11 @@ describe( 'reporter', () => {
 
             const files = readdirSync( outputFolder );
 
-            expect( files.length ).toEqual( 3 );
+            expect( files.length ).toEqual( 2 );
             expect( ( readJsonSync( jsonFile ) as any[] ).length ).toEqual( 1 );
 
             // Clean up
-            removeSync( outputFolder );
+            removeSync( jsonFile );
         } );
     } );
 

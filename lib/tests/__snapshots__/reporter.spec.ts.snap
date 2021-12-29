@@ -83,8 +83,8 @@ exports[`reporter on create should set the defaults only if the reportProperties
 Object {
   "jsonFolder": "./tmp/jsons",
   "language": "en",
-  "logFile": "tmp/logFile.json",
-  "outputDir": "tmp",
+  "logFile": "tmp1/logFile.json",
+  "outputDir": "tmp1",
 }
 `;
 

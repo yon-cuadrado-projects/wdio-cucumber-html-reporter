@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import { AFTER, BEFORE, DEFAULT_JSON_FOLDER, DEFAULT_LANGUAGE, PASSED, TEXT_PLAIN, } from './constants';
 import { CucumberJsAttachment, Feature, Report } from './models';
 import { HookStatsExtended, OptionsExtended } from './types/wdio';
@@ -14,7 +15,6 @@ import { resolve } from 'path';
 const log = logger( 'wdio-cucumber-html-reporter' );
 
 export class CucumberHtmlReporter extends WDIOReporter {
-    // public language: string;
     public options: Partial<OptionsExtended>;
     public reporterName: string;
     public instanceMetadata: Models.Metadata[];
@@ -23,10 +23,12 @@ export class CucumberHtmlReporter extends WDIOReporter {
     public reportProperties: Models.ReportGeneration;
 
     public constructor( options: Partial<OptionsExtended> ) {
-        // const options = <Partial<OptionsExtended>>{};
 
         options.outputDir = options?.outputDir ?? resolve( process.cwd(), DEFAULT_JSON_FOLDER );
         options.logFile = options.logFile ?? `${options?.outputDir}/logFile.json`;
+        if( ! fs.existsSync( options?.outputDir ) ){
+            fs.mkdirSync( options?.outputDir, { recursive: true } );
+        }
         super( options );
 
         if ( !options?.language ) {

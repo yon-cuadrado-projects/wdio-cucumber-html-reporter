@@ -72,3 +72,4 @@ yarn.lock
 .tmp/
 build/
 dist
+tmp1/logFile.json

@@ -46,7 +46,7 @@
     "@cucumber/gherkin": "~22.0.0",
     "@wdio/logger": "~7.16.0",
     "@wdio/reporter": "^7.16.14",
-    "cucumber-html-report-generator": "1.0.7"
+    "cucumber-html-report-generator": "1.0.8"
   },
   "peerDependencies": {
     "@wdio/cucumber-framework": "~7.16.14"

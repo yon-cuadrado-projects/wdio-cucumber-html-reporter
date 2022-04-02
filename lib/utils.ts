@@ -1,9 +1,7 @@
-import { ErrorMessage, Step } from './models';
 import { HookStats, TestStats } from '@wdio/reporter';
-import { FAILED } from './constants';
-
 import stripAnsi from 'strip-ansi';
-
+import { FAILED } from './constants';
+import { ErrorMessage } from './models';
 
 
 /**
@@ -22,5 +20,3 @@ export const getFailedMessage = ( testObject: TestStats | HookStats ): ErrorMess
 
     return {};
 };
-
-

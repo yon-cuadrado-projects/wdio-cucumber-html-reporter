@@ -410,7 +410,8 @@ module.exports = {
         "use-isnan": "error",
         "valid-typeof": "off",
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": "error"
+        "@typescript-eslint/no-shadow": "error",
+        "sort-imports": "off"
     },
     "overrides":[
         {

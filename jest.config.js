@@ -1,6 +1,6 @@
 module.exports = {
     roots: [
-        "<rootDir>/lib"
+        '<rootDir>/lib'
     ],
     preset: 'ts-jest',
     testEnvironment: 'node',
@@ -26,7 +26,7 @@ module.exports = {
         'docs/'
     ],
     transform: {
-        "^.+\\.(ts|tsx)$": "ts-jest"
+        '^.+\\.(ts|tsx)$': 'ts-jest'
     },
     testTimeout: 10000
-}
+};

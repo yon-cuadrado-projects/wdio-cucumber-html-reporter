@@ -1,4 +1,4 @@
-# wdio-reporter-html
+# wdio-cucumber-html-reporter
 A WDIO reporter that creates an html report using the plugin [cucumber-html-report-generator](https://github.com/yon-cuadrado-projects/cucumber-html-report-generator)
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)

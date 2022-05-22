@@ -88,7 +88,7 @@ and then in the onComplete hook the html report is generated.The options of the 
 ## Metadata
 
 This report can automatically store the metadata of the current machine / device the feature has been executed on.
-To customize this you can add it by adding the following object to your `capabilities`
+To customize this you can add the following object to your `capabilities`
 
 ```js
 // Example wdio.conf.js
@@ -186,3 +186,6 @@ CucumberHtmlReporter.attach({"json-string": true}, 'application/json');
 // Attach a screenshot in a before hook
 CucumberHtmlReporter.attach(browser.takeScreenshot(), 'image/png');
 ```
+
+## Project example
+I have created a project where this report is used: [webdriverio-cucumber-typescript](https://github.com/yon-cuadrado-projects/webdriverio-cucumber-typescript).

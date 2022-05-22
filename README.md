@@ -18,7 +18,7 @@ The easiest way is to keep `wdio-reporter-html` as a devDependency in your `pack
 ```json
 {
   "devDependencies": {
-    "wdio-reporter-html": "0.0.12"
+    "wdio-reporter-html": "0.0.29"
   }
 }
 ```

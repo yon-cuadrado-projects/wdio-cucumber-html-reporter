@@ -26,10 +26,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yon-cuadrado-projects/wdio-reporter-html.git"
+    "url": "git+https://github.com/yon-cuadrado-projects/wdio-cucumber-html-reporter.git"
   },
   "keywords": [
     "cucumberjs",
+    "cucumber",
     "reporter",
     "report",
     "webdriverio",

@@ -3,7 +3,7 @@ A WDIO reporter that creates an html report using the plugin [cucumber-html-repo
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-[![NPM](https://nodei.co/npm/wdio-reporter-html.png)](https://nodei.co/npm/wdio-reporter-html/)
+[![NPM](https://nodei.co/npm/wdio-cucumber-html-reporter.png)](https://nodei.co/npm/wdio-cucumber-html-reporter/)
 
 > **THIS MODULE CAN ONLY WORK WITH WebdriverIO V7+!**\
 
@@ -13,12 +13,12 @@ This reporter will generate an html file using the plugin
 It will also add metadata about the running instance to the feature file and last but not least, it will give you the opportunity to add attachments to the JSON output.
 
 ## Installation
-The easiest way is to keep `wdio-reporter-html` as a devDependency in your `package.json`.
+The easiest way is to keep `wdio-cucumber-html-reporter` as a devDependency in your `package.json`.
 
 ```json
 {
   "devDependencies": {
-    "wdio-reporter-html": "0.0.29"
+    "wdio-cucumber-html-reporter": "0.0.29"
   }
 }
 ```
@@ -26,7 +26,7 @@ The easiest way is to keep `wdio-reporter-html` as a devDependency in your `pack
 You can simple do it by:
 
 ```bash
-npm install wdio-reporter-html --save-dev
+npm install wdio-cucumber-html-reporter --save-dev
 ```
 
 so it will automatically be added to your `package.json`
@@ -174,7 +174,7 @@ You have the option to attach data to the JSON file in all these hooks / steps:
 The only thing you need to provide is the following code in your step files.
 
 ```js
-import CucumberHtmlReporter from 'wdio-reporter-html';
+import CucumberHtmlReporter from 'wdio-cucumber-html-reporter';
 
 // Attach a string (if no type is provided it will automatically default to `text/plain`
 CucumberHtmlReporter.attach('just a string');

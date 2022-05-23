@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <link rel="stylesheet" href="../resources/bootstrap-5.0.1/bootstrap.min.css" />
+        <link rel="stylesheet" href="../resources/font-awesome-5.15.3/css/all.min.css"/>
+                
+    
+    <style type="text/css">
+        /* colors */
+.ambiguous-color {
+    color: #E74C3C !important;
+}
+
+.failed-color {
+    color: #E74C3C !important;
+}
+
+.undefined-color {
+    color: #F39C12 !important;
+}
+
+.passed-color {
+    color: #1ABB9C !important;
+}
+
+.pending-color {
+    color: #FFD119 !important;
+}
+
+.skipped-color {
+    color: #3498DB !important;
+    /* line-height: normal; */
+}
+
+.various-color {
+    color: #9b59b6 !important;
+}
+
+/* backgrounds */
+.ambiguous-background {
+    background: #b73122 !important;
+}
+
+.failed-background {
+    background: #E74C3C !important;
+}
+
+.undefined-background {
+    background: #F39C12 !important;
+}
+
+.passed-background {
+    background: #1ABB9C !important;
+}
+
+.pending-background {
+    background: #FFD119 !important;
+}
+
+.skipped-background {
+    background: #3498DB !important;
+}
+
+.page-background {
+    background-color: #000000 !important;
+}
+
+body {
+    color: #73879C;
+    background: #000000;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#navBar{
+    background-color: #000000;
+    font-size: 
+    0.5vw;
+}
+/* features table hide extra content in tags and result cells */
+i span {
+    display: none;
+}
+
+h1{
+    line-height: 0.40 !important;
+    font-size:2.5vw;
+}
+
+h2{
+    line-height: 1 !important;
+}
+
+h1 small{
+    font-size:1.7vw !important;
+}
+
+h6{
+    line-height: 1.7 !important;
+}
+
+.tags {
+    line-height: normal;
+    font-size: 0.8vw;
+}
+
+div.scenarioBlock > h2 {
+    color: #525D76;
+    line-height: 0.8;
+    font-size: 1.7vw;
+}
+
+div.scenarioBlock > h2 > small{
+    color: #525D76;
+    font-size: 1.1vw;
+}
+
+h2.scenarioTime{
+    color: white !important;
+    font-size: 1.5rem;
+}
+
+.scenarioResultsContainer{
+    min-width: 100px;
+}
+
+.dataTables_scrollHeadInner > table > thead > tr > th{
+    background-color: Blue;
+}
+
+#features-table > tbody > tr > td:first-child{
+    padding-left: 10px;
+}
+
+span.scenarioStepKeywordAnd,
+p2.scenarioStepName,
+span.scenarioStepName,
+span.scenarioStepKeyword{
+    color: #73879C;
+}
+
+.dataTables_scrollFootInner > table > tfoot > tr > td{
+    background-color: #ff9966;
+}
+
+span.scenarioOutlineCircle {
+    height: 27px;
+    width: 27px;    
+}
+
+.features-page-header{
+    table-layout: fixed;
+}
+
+.informationBlock{
+    white-space: pre;
+    line-height: normal;
+}
+
+th::before, th::after{
+    color: white;
+}
+
+.table-scrollable
+{
+    height: 130px;
+    overflow-y: auto;
+}
+ 
+.chart-container {
+    width: 150px;
+    height: 150px
+}
+
+        /* colors */
+.ambiguous-color {
+    color: #E74C3C !important;
+}
+
+.failed-color {
+    color: #E74C3C !important;
+}
+
+.undefined-color {
+    color: #F39C12 !important;
+}
+
+.passed-color {
+    color: #1ABB9C !important;
+}
+
+.pending-color {
+    color: #FFD119 !important;
+}
+
+.skipped-color {
+    color: #3498DB !important;
+    /* line-height: normal; */
+}
+
+.various-color {
+    color: #9b59b6 !important;
+}
+
+/* backgrounds */
+.ambiguous-background {
+    background: #b73122 !important;
+}
+
+.failed-background {
+    background: #E74C3C !important;
+}
+
+.undefined-background {
+    background: #F39C12 !important;
+}
+
+.passed-background {
+    background: #1ABB9C !important;
+}
+
+.pending-background {
+    background: #FFD119 !important;
+}
+
+.skipped-background {
+    background: #3498DB !important;
+}
+
+.page-background {
+    background-color: #000000 !important;
+}
+
+body {
+    color: #73879C;
+    background: #000000;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#navBar{
+    background-color: #000000;
+    font-size: 
+    0.5vw;
+}
+/* features table hide extra content in tags and result cells */
+i span {
+    display: none;
+}
+
+h1{
+    line-height: 0.40 !important;
+    font-size:2.5vw;
+}
+
+h2{
+    line-height: 1 !important;
+}
+
+h1 small{
+    font-size:1.7vw !important;
+}
+
+h6{
+    line-height: 1.7 !important;
+}
+
+.tags {
+    line-height: normal;
+    font-size: 0.8vw;
+}
+
+div.scenarioBlock > h2 {
+    color: #525D76;
+    line-height: 0.8;
+    font-size: 1.7vw;
+}
+
+div.scenarioBlock > h2 > small{
+    color: #525D76;
+    font-size: 1.1vw;
+}
+
+h2.scenarioTime{
+    color: white !important;
+    font-size: 1.5rem;
+}
+
+.scenarioResultsContainer{
+    min-width: 100px;
+}
+
+.dataTables_scrollHeadInner > table > thead > tr > th{
+    background-color: Blue;
+}
+
+#features-table > tbody > tr > td:first-child{
+    padding-left: 10px;
+}
+
+span.scenarioStepKeywordAnd,
+p2.scenarioStepName,
+span.scenarioStepName,
+span.scenarioStepKeyword{
+    color: #73879C;
+}
+
+.dataTables_scrollFootInner > table > tfoot > tr > td{
+    background-color: #ff9966;
+}
+
+span.scenarioOutlineCircle {
+    height: 27px;
+    width: 27px;    
+}
+
+.features-page-header{
+    table-layout: fixed;
+}
+
+.informationBlock{
+    white-space: pre;
+    line-height: normal;
+}
+
+th::before, th::after{
+    color: white;
+}
+
+.table-scrollable
+{
+    height: 130px;
+    overflow-y: auto;
+}
+ 
+.chart-container {
+    width: 150px;
+    height: 150px
+}
+
+    </style>
+</head>
+
+<body>
+    <nav id="navBar" class="navbar navbar-default navbar-fixed-top fixed-top pt-0 pb-0 border ms-4 me-4 navbar-expand">
+        <div class="container-fluid border border-dark d-flex flex-row ps-0 pe-0">
+            <div class="border-right border-dark">
+                <button id="backButton" type="submit" class="btn">
+                    
+                    
+                    
+                    <i class="fas fa-arrow-left fa-5x"></i>
+                </button>
+            </div>
+            <div class="d-flex flex-column me-auto ms-4">
+                
+                
+                <div class="d-flex flex-column mt-4 ms-1">
+                    <h1>Feature:
+                        <small>
+                            Feature with all scenarios in status ambigous ^'@#
+                        </small>
+                    </h1>
+                    <h6 id ="featureDescription" class="ms-1">
+                        The scenarios have been scripted twice
+  So the report should hold ambiguous steps
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="fluentContent" class="container-fluid">
+        <div class="d-flex flex-column">
+            <div class="row d-flex flex-row ms-1 me-1 mb-4">
+                    <div class="flex flex-grow-1 border p-2 col-sm m-2">
+        <div class="d-flex flex-column">
+            <div class="graph-title d-inline-flex border-bottom" data-bs-toggle="collapse" data-bs-target="#scenarios-charts,#steps-charts,#metadata-properties">
+                <h2 class="d-flex align-text-bottom"> Scenarios </h2>
+                <li class="d-flex align-items-center ms-auto">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </li>
+            </div>
+            <div id="scenarios-charts" class="collapse show">
+                <div class="x_content container-fluid">
+                    <table class="w-100 d-flex flex-column">
+                        <tr class="d-flex flex-row justify-content-center">
+                            <td class="me-3">
+                                <div class="chart-container">
+                                    <canvas id="scenarios" class=""></canvas>
+                                </div>
+                            </td>
+                            <td class="align-top">
+                                <table class="w-100">
+                                    <tr>
+                                        <th class="pe-2">
+                                            <div>
+                                                <p class="text-center">Status</p>
+                                            </div>
+                                        </th>
+                                        <th class="me-2">                                              
+                                            <div>
+                                                <p class="text-center">Progress</p>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td class="pe-2">
+                                            <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario passed">
+                                                <i class="fa fa-check-circle passed-color me-2"></i>
+                                                Passed
+                                            </p>
+                                        </td>
+                                        <td class="text-end">0.00 %</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pe-2">
+                                            <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario failed">
+                                                <i class="fa fa-exclamation-circle failed-color me-2"></i>
+                                                Failed
+                                            </p>
+                                        </td>
+                                        <td class="text-end">0.00 %</td>
+                                    
+                                    <tr>
+                                        <td class="pe-2">
+                                            <p class="mb-0" data-toggle="tooltip" data-placement="left"
+                                            title="Scenario has double step implementation and failed because of that.">
+                                                <i class="fa fa-bolt ambiguous-color me-2 ms-1"></i>
+                                                Ambiguous
+                                            </p>
+                                        </td>
+                                        <td class="text-end">100.00 %</td>
+                                    </tr>
+                                    
+                                    
+                                    </tr>
+                                    
+                                    
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-grow-1 border p-2 col-sm m-2">
+        <div class="d-flex flex-column">
+            <div class="graph-title d-inline-flex border-bottom" data-bs-toggle="collapse" data-bs-target="#scenarios-charts,#steps-charts,#metadata-properties">
+                <h2 class="d-flex align-text-bottom"> Steps </h2>
+                <li class="d-flex align-items-center ms-auto">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </li>
+            </div>
+            <div id="steps-charts" class="collapse show">
+                <div class="x_content container-fluid">
+                    <table class="w-100 d-flex flex-column">
+                        <tr class="d-flex flex-row justify-content-center">
+                            <td class="me-3">
+                                <div class="chart-container">
+                                    <canvas id="steps"></canvas>
+                                </div>
+                            </td>
+                            <td class="align-top">
+                                <table class="w-100">
+                                    <tr>
+                                        <th class="pe-2">
+                                            <div>
+                                                <p class="text-center">Status</p>
+                                            </div>
+                                        </th>
+                                        <th class="me-2">                                              
+                                            <div>
+                                                <p class="text-center">Progress</p>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td class="pe-2">
+                                            <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario passed">
+                                                <i class="fa fa-check-circle passed-color me-2"></i>
+                                                Passed
+                                            </p>
+                                        </td>
+                                        <td class="text-end">33.33 %</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pe-2">
+                                            <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario failed">
+                                                <i class="fa fa-exclamation-circle failed-color me-2"></i>
+                                                Failed
+                                            </p>
+                                        </td>
+                                        <td class="text-end">0.00 %</td>
+                                    
+                                    <tr>
+                                        <td class="pe-2">
+                                            <p class="mb-0" data-toggle="tooltip" data-placement="left"
+                                            title="Scenario has double step implementation and failed because of that.">
+                                                <i class="fa fa-bolt ambiguous-color me-2 ms-1"></i>
+                                                Ambiguous
+                                            </p>
+                                        </td>
+                                        <td class="text-end">16.67 %</td>
+                                    </tr>
+                                    
+                                    
+                                    </tr>
+                                    
+                                    
+                                    <tr>
+                                        <td class="pe-2">
+                                            <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario is skipped">
+                                                <i class="fa fa-arrow-circle-right skipped-color me-2"></i>
+                                                Skipped
+                                            </p>
+                                        </td>
+                                        <td class="text-end">50.00 %</td>
+                                    </tr>
+                                    
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+            </div>
+            <div class="d-flex flex-column ps-0 pe-0">
+                <div class="container-fluid ps-2 pe-2 pb-2">
+    <div class="x_panel border mt-2 pb-3">
+        
+        <div class="x_title m-2" data-bs-toggle="collapse" data-bs-target="#ambiguous-scenarios-specified-v1scenario-with-ambiguous-scenarios-0">
+            <div class="scenarioBlock d-flex mt-auto align-items-bottom mb-0 border-bottom" style="white-space:nowrap;">
+    
+        <h2 class="scenarioType mt-auto mb-0 me-2 align-text-bottom"> Scenario:
+            
+            <small>scenario with ambiguous steps:{&/%</small>
+        </h2>
+
+        
+            <h2 class="scenarioTime mb-0 me-1 d-flex align-items-baseline pb-0 mt-auto ms-auto">
+                00:00:03.289</h2>
+            <ul class="scenarioResultsContainer d-flex flex-row me-0 ms-2 mt-auto mb-1 ps-2 justify-content-end ms-0">
+        
+            <li class="scenarioOutlineToolBox d-flex order-1">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-down pt-2 ps-1"></i>
+                </a>
+            </li>
+
+            
+            <li class="d-flex align-items-center">
+                <span
+                    class="ambiguous-background scenarioOutlineCircle text-dark d-flex rounded-circle justify-content-center align-items-center"
+                    data-bs-toggle="tooltip"
+                    title="Scenario has double step implementation and failed because of that.">
+                    <p class="m-0"> 1 </p>
+                </span>
+            </li>
+            
+
+            
+
+            
+            <li class="d-flex align-items-center">
+                <span
+                    class="skipped-background scenarioOutlineCircle text-dark d-flex rounded-circle justify-content-center align-items-center"
+                    data-bs-toggle="tooltip" title="Scenario is skipped">
+                    <p class="m-0"> 3 </p>
+                </span>
+            </li>
+            
+
+            
+
+            
+            <li class="d-flex align-items-center">
+                <span
+                    class="passed-background scenarioOutlineCircle text-dark d-flex rounded-circle justify-content-center align-items-center"
+                    data-bs-toggle="tooltip" title="Scenario passed">
+                    <p class="m-0"> 2 </p>
+                </span>
+            </li>
+            
+
+            
+        </ul>
+</div>
+        </div>
+        <div class="collapse" id="ambiguous-scenarios-specified-v1scenario-with-ambiguous-scenarios-0">
+            
+<div class="before scenario-step-container mb-auto ms-4 align-items-baseline d-flex flex-row" data-bs-toggle="collapse"
+    data-bs-target="#before-0">
+
+    
+    <div class=me-2>00:00:01.235 </div>
+    
+
+    <div>
+        <span>Before:</span>
+        <a class="collapse-link">
+            <i class="fa fa-chevron-down pt-2 ps-1 pe-1"></i>
+        </a>
+    </div>
+</div>
+<div class="collapse mb-2 mt-2 ms-4" id="before-0">
+    
+<div class="x_content_steps mb-2 mt-2">
+    <table class="ms-4 table-borderless" Style="table-layout:fixed;">
+        
+        <tr class="p-0">
+            
+            <td class="p-0 page-background">
+                <div class="me-2">00:00:01.235 </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="label d-flex mb-1">
+                    <i class="fa fa-check-circle fa-1x passed-color" data-bs-toggle="tooltip" data-placement="top"
+                        title="Step passed"></i>
+                </div>
+            </td>
+            
+
+            
+
+            <td class="p-0 page-background">
+                <div class="ms-2 me-2 text-nowrap">
+                    <span
+                        class="scenarioStepName"></span>
+                </div>
+            </td>
+
+            <td class="pb-auto pt-0 page-background">
+                <div class="me-auto text-nowrap">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </div>
+            </td>
+            <td class="w-100 page-background"></td>
+        </tr>
+        
+        
+
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        
+
+        
+
+
+        
+    </table>
+</div>
+
+</div>
+
+
+            
+<div class="x_content_steps mb-2 mt-2">
+    <table class="ms-4 table-borderless" Style="table-layout:fixed;">
+        
+        <tr class="p-0">
+            
+            <td class="p-0 page-background">
+                <div class="me-2">00:00:01.293 </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="label d-flex mb-1">
+                    <i class="fa fa-check-circle fa-1x passed-color" data-bs-toggle="tooltip" data-placement="top"
+                        title="Step passed"></i>
+                </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="d-flex flex-row ms-2">
+                    <span class="keyword highlight scenarioStepKeywordAnd">Given </span>
+                </div>
+            </td>
+            
+
+            <td class="p-0 page-background">
+                <div class="ms-2 me-2 text-nowrap">
+                    <span
+                        class="scenarioStepName">Ambiguous Johnny visits the Angular homepage Ñ)/&%$</span>
+                </div>
+            </td>
+
+            <td class="pb-auto pt-0 page-background">
+                <div class="me-auto text-nowrap">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </div>
+            </td>
+            <td class="w-100 page-background"></td>
+        </tr>
+        
+        
+
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        
+
+        
+
+
+        
+        <tr class="p-0">
+            
+            <td class="p-0 page-background">
+                <div class="me-2">00:00:00.000 </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="label d-flex mb-1">
+                    <i class=" fas fa-bolt fa-1x ambiguous-color" data-bs-toggle="tooltip" data-placement="top"
+                        title="Step has double step implementation and failed because of that"></i>
+                </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="d-flex flex-row ms-2">
+                    <span class="keyword highlight scenarioStepKeywordAnd">When </span>
+                </div>
+            </td>
+            
+
+            <td class="p-0 page-background">
+                <div class="ms-2 me-2 text-nowrap">
+                    <span
+                        class="scenarioStepName">he clicks on the second button</span>
+                </div>
+            </td>
+
+            <td class="pb-auto pt-0 page-background">
+                <div class="me-auto text-nowrap">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </div>
+            </td>
+            <td class="w-100 page-background"></td>
+        </tr>
+        
+        
+
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        
+
+        
+
+
+        
+        <tr class="p-0">
+            
+            <td class="p-0 page-background">
+                <div class="me-2">00:00:00.000 </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="label d-flex mb-1">
+                    <i class=" fas fa-arrow-circle-right fa-1x skipped-color" data-bs-toggle="tooltip" data-placement="top"
+                        title="Step is skipped"></i>
+                </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="d-flex flex-row ms-2">
+                    <span class="keyword highlight scenarioStepKeywordAnd">Then </span>
+                </div>
+            </td>
+            
+
+            <td class="p-0 page-background">
+                <div class="ms-2 me-2 text-nowrap">
+                    <span
+                        class="scenarioStepName">he expects that something happens</span>
+                </div>
+            </td>
+
+            <td class="pb-auto pt-0 page-background">
+                <div class="me-auto text-nowrap">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </div>
+            </td>
+            <td class="w-100 page-background"></td>
+        </tr>
+        
+        
+
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        
+
+        
+
+
+        
+    </table>
+</div>
+
+            
+<div class="after scenario-step-container mb-auto ms-4 align-items-baseline d-flex flex-row" data-bs-toggle="collapse"
+    data-bs-target="#after-0">
+
+    
+    <div class=me-2>00:00:00.761 </div>
+    
+
+    <div>
+        <span>After:</span>
+        <a class="collapse-link">
+            <i class="fa fa-chevron-down pt-2 ps-1 pe-1"></i>
+        </a>
+    </div>
+</div>
+<div class="collapse  mb-2 mt-2 ms-4" id="after-0">
+    
+<div class="x_content_steps mb-2 mt-2">
+    <table class="ms-4 table-borderless" Style="table-layout:fixed;">
+        
+        <tr class="p-0">
+            
+            <td class="p-0 page-background">
+                <div class="me-2">00:00:00.324 </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="label d-flex mb-1">
+                    <i class=" fas fa-arrow-circle-right fa-1x skipped-color" data-bs-toggle="tooltip" data-placement="top"
+                        title="Step is skipped"></i>
+                </div>
+            </td>
+            
+
+            
+
+            <td class="p-0 page-background">
+                <div class="ms-2 me-2 text-nowrap">
+                    <span
+                        class="scenarioStepName"></span>
+                </div>
+            </td>
+
+            <td class="pb-auto pt-0 page-background">
+                <div class="me-auto text-nowrap">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </div>
+            </td>
+            <td class="w-100 page-background"></td>
+        </tr>
+        
+        
+
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        
+
+        
+
+
+        
+        <tr class="p-0">
+            
+            <td class="p-0 page-background">
+                <div class="me-2">00:00:00.436 </div>
+            </td>
+            
+
+            
+            <td class="p-0 page-background">
+                <div class="label d-flex mb-1">
+                    <i class=" fas fa-arrow-circle-right fa-1x skipped-color" data-bs-toggle="tooltip" data-placement="top"
+                        title="Step is skipped"></i>
+                </div>
+            </td>
+            
+
+            
+
+            <td class="p-0 page-background">
+                <div class="ms-2 me-2 text-nowrap">
+                    <span
+                        class="scenarioStepName"></span>
+                </div>
+            </td>
+
+            <td class="pb-auto pt-0 page-background">
+                <div class="me-auto text-nowrap">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                </div>
+            </td>
+            <td class="w-100 page-background"></td>
+        </tr>
+        
+        
+
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        
+
+        
+
+
+        
+    </table>
+</div>
+
+</div>
+
+
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+
+        <div class="created-by text-center pt-4">
+            <p>Created by yon cuadrado. Find me on:</p>
+            <a href="https://github.com/yon-cuadrado" target="_blank">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/yon-cuadrado-blanco/" target="_blank">
+                <i class="fab fa-linkedin fa-2x"></i>
+            </a>
+        </div>
+    </div>
+    
+        <script type="text/javascript" src="../resources/jquery-3.6.0/jquery.js"></script>
+        <script type="text/javascript" src="../resources/bootstrap-5.0.1/bootstrap.min.js"></script>
+        
+        <!-- Chart.js -->
+        <script type="text/javascript" src="../resources/chart.js-3.3.1/chart.min.js"></script>
+        <script type="text/javascript" src="../resources/chart.js-3.3.1/chartjs-plugin-datalabels.min.js"></script> 
+        
+    <!-- Custom -->
+    <script type="text/javascript">
+$(document).ready(function () {
+    var dataScenarios = {"datasets":[{"backgroundColor":["#228B22","#E74C3C","#FFD119","#3498DB","#b73122","#F39C12"],"data":[0,0,0,0,1,0]}],"labels":["Passed","Failed","Pending","Skipped","Ambiguous","Undefined"]}
+    var dataSteps = {"datasets":[{"backgroundColor":["#228B22","#E74C3C","#FFD119","#3498DB","#b73122","#F39C12"],"data":[2,0,0,3,1,0]}],"labels":["Passed","Failed","Pending","Skipped","Ambiguous","Undefined"]}
+    var graphOptions =() => ({
+            responsive: true,
+            elements: {},
+            legend: {
+                display: false
+            },
+            maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Chart',
+                    color: this.theme === 'Dark' ? '#73879c' : '#73879c',
+                    padding: {
+                        bottom: 20,
+                        top: 3
+                    }
+                },
+                legend: {
+                    display: false
+                },
+                datalabels: {
+                    color: '#ffffff',
+                    formatter: (value) => value ? `${value}` : ''
+                }
+            },
+        })
+    var writeValueInCenter =() => ({
+            id: 'paint_number_in_center',
+            beforeDraw: (chart) => {
+                const { width } = chart;
+                const { height } = chart;
+                const ctx = chart.ctx;
+                const textX = Math.round((width - ctx.measureText(chart.options.elements.text).width) / 2);
+                const textY = (height + chart.chartArea.top) / 2;
+                ctx.fillStyle = this.theme === 'Dark' ? '#73879c' : '#73879c';
+                ctx.fillText(chart.options.elements.text, textX, textY);
+                ctx.save();
+            }
+        })
+    var generateChart = (chartName, chartData, graphOptions, chartCenterValue) => {
+            const canvas = document.getElementById(chartName);
+            const ctx = canvas.getContext('2d');
+            (graphOptions.elements).text = chartCenterValue;
+            const chart = new Chart(ctx, {
+                data: chartData,
+                options: graphOptions,
+                plugins: [writeValueInCenter(), ChartDataLabels],
+                type: 'doughnut'
+            });
+            return chart;
+        }
+
+    const centerNumberScenarios = 1;
+    const scenariosChart = generateChart( 'scenarios', dataScenarios, graphOptions(), centerNumberScenarios);
+    const centerNumberSteps = 6;
+    const stepsChart = generateChart( 'steps', dataSteps, graphOptions(), centerNumberSteps );    
+});
+</script>
+
+<script type="text/javascript">
+    window.addEventListener('resize', function(event){
+    var targetElement = document.getElementById("fluentContent");
+    var navBarElement = document.getElementById("navBar");
+    var newPaddingTop = parseInt(navBarElement.offsetHeight) + 10;
+    if(typeof targetElement != 'undefined'){
+        targetElement.setAttribute("style","padding-top:" + newPaddingTop + "px;");
+    }
+    });
+
+    $(".scenarioBlock").on("click",function(){
+        $(".scenarioBlock ul li a i").toggleClass("fa-chevron-down");
+        $(".scenarioBlock ul li a i").toggleClass("fa-chevron-up");
+    });
+
+    $(".graph-title").on("click",function(){
+        $(".graph-title li a i").toggleClass("fa-chevron-down");
+        $(".graph-title li a i").toggleClass("fa-chevron-up");
+        if( $(".table-scrollable").is(':visible') ){
+            $(".table-scrollable").hide();
+        }else{
+            $(".table-scrollable").show();
+        }
+    });
+
+    $(".before,.after").on("click",function(){
+        $(this).find("div a i").toggleClass("fa-chevron-down");
+        $(this).find("div a i").toggleClass("fa-chevron-up");
+    });
+
+    $(document).ready(function () {
+        var targetElement = document.getElementById("fluentContent");
+        var navBarElement = document.getElementById("navBar");
+        var newPaddingTop = parseInt(navBarElement.offsetHeight) + 10;
+        if(typeof targetElement != 'undefined'){
+            targetElement.setAttribute("style","padding-top:" + newPaddingTop + "px;");
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    document.getElementById("backButton").onclick = function () {
+        location.href = '../index.html';
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title></title>
+
+    
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"
+            integrity="sha512-Ez0cGzNzHR1tYAv56860NLspgUGuQw16GiOOp/I2LuTmpSK9xDXlgJz3XN4cnpXWDmkNBKXR/VDMTCnAaEooxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- DataTables -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.min.js" 
+            integrity="sha512-EKWWs1ZcA2ZY9lbLISPz8aGR2+L7JVYqBAYTq5AXgBkSjRSuQEGqWx8R1zAX16KdXPaCjOCaKE8MCpU0wcHlHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.bootstrap4.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap4.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.0.3/css/scroller.bootstrap4.css"/>
+    
+    <!-- Custom Theme Style -->
+    <style type="text/css">
+        /* colors */
+.ambiguous-color {
+    color: #E74C3C !important;
+}
+
+.failed-color {
+    color: #E74C3C !important;
+}
+
+.undefined-color {
+    color: #F39C12 !important;
+}
+
+.passed-color {
+    color: #1ABB9C !important;
+}
+
+.pending-color {
+    color: #FFD119 !important;
+}
+
+.skipped-color {
+    color: #3498DB !important;
+    /* line-height: normal; */
+}
+
+.various-color {
+    color: #9b59b6 !important;
+}
+
+
+/* backgrounds */
+.ambiguous-background {
+    background: #b73122 !important;
+}
+
+.failed-background {
+    background: #E74C3C !important;
+}
+
+.undefined-background {
+    background: #F39C12 !important;
+}
+
+.passed-background {
+    background: #1ABB9C !important;
+}
+
+.pending-background {
+    background: #FFD119 !important;
+}
+
+.skipped-background {
+    background: #3498DB !important;
+}
+
+body {
+    color: #73879C;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#navBar{
+    font-size: 0.5vw;
+}
+
+/* features table hide extra content in tags and result cells */
+i span {
+    display: none;
+}
+h1{
+    line-height: 0.40 !important;
+    font-size:2.5vw;
+}
+
+h2{
+    line-height: 1 !important;
+}
+
+h1 small{
+    font-size:1.7vw !important;
+}
+
+h6{
+    line-height: 1.7 !important;
+}
+
+.tags {
+    line-height: normal;
+    font-size: 0.8vw;
+}
+
+div.scenarioBlock > h2 {
+    color: #525D76;
+    line-height: 0.8;
+    font-size: 1.7vw;
+}
+
+div.scenarioBlock > h2 > small{
+    color: #525D76;
+    font-size: 1.1vw;
+}
+
+h2.scenarioTime{
+    color: white !important;
+    font-size: 1.5rem;
+}
+
+.scenarioResultsContainer{
+    min-width: 100px;
+}
+
+.dataTables_scrollHeadInner > table > thead > tr > th{
+    background-color: Blue;
+}
+
+#features-table > tbody > tr > td:first-child{
+    padding-left: 10px;
+}
+
+span.scenarioStepKeywordAnd,
+p2.scenarioStepName,
+span.scenarioStepName,
+span.scenarioStepKeyword{
+    color: #73879C;
+}
+
+.dataTables_scrollFootInner > table > tfoot > tr > td{
+    background-color: #ff9966;
+}
+
+span.scenarioOutlineCircle {
+    height: 27px;
+    width: 27px;    
+}
+
+.features-page-header{
+    table-layout: fixed;
+}
+
+.informationBlock{
+    white-space: pre;
+    line-height: normal;
+}
+
+.table-scrollable
+{
+    height: 130px;
+    overflow-y: auto;
+}
+
+.chart-container {
+    width: 150px;
+    height:150px
+}
+        
+    </style>
+</head>
+
+<body>
+    <nav class="navbar border ms-4 me-4 mt-2 mb-2">
+        <div class="container-fluid p-0 m-3">
+            <h1>Cucumber HTML Report Generator</h1>
+        </div>
+    </nav>
+    <div class="container-fluid p-0">
+        <div class="row d-flex flex-row p-0 mb-4 ms-3 me-3">
+            <div class="flex flex-grow-1 border p-2 col-sm m-2">
+    <div class="d-flex flex-column">
+        <div class="graph-title d-inline-flex border-bottom" data-bs-toggle="collapse" data-bs-target="#features-charts, #scenarios-charts,#metadata-properties">
+            <h2 class="d-flex align-text-bottom"> Features </h2>
+            <li class="d-flex align-items-center ms-auto">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </li>
+        </div>
+        <div id="features-charts" class="collapse show">
+            <div class="x_content container-fluid">
+                <table class="w-100 d-flex flex-column">
+                    <tr class="d-flex flex-row justify-content-center">
+                        <td class="me-3">
+                            <div class="chart-container">
+                                <canvas id="features"></canvas>
+                            </div>
+                        </td>
+                        <td class="align-top">
+                            <table class="w-100">
+                                <tr>
+                                    <th class="pe-2">
+                                        <div>
+                                            <p class="text-center">Status</p>
+                                        </div>   
+                                    </th> 
+                                    <th class="me-2">                                              
+                                        <div>
+                                            <p class="text-center">Progress</p>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td class="pe-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario passed">
+                                            <i class="fa fa-check-circle passed-color me-2"></i>
+                                            Passed
+                                        </p>
+                                    </td>
+                                    <td class="text-end">16.67 %</td>
+                                </tr>
+                                <tr>
+                                    <td class="pe-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario failed">
+                                            <i class="fa fa-exclamation-circle failed-color me-2"></i>
+                                            Failed
+                                        </p>
+                                    </td>
+                                    <td class="text-end">8.33 %</td>
+                                
+                                <tr>
+                                    <td class="pe-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left"
+                                        title="Scenario has double step implementation and failed because of that.">
+                                            <i class="fa fa-bolt ambiguous-color me-2 ms-1"></i>
+                                            Ambiguous
+                                        </p>
+                                    </td>
+                                    <td class="text-end">8.33 %</td>
+                                </tr>
+                                
+                                
+                                <tr>
+                                    <td class="pe-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario has no step implmentation.">
+                                            <i class="fa fa-question-circle undefined-color me-2"></i>
+                                            Not defined
+                                        </p>
+                                    </td>
+                                    <td class="text-end">16.67 %</td>
+                                </tr>
+                                
+                                </tr>
+                                
+                                <tr>
+                                    <td class="pe-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario is pending">
+                                            <i class="fa fa-minus-circle pending-color me-2"></i>
+                                            Pending
+                                        </p>
+                                    </td>
+                                    <td class="text-end">8.33 %</td>
+                                </tr>
+                                
+                                
+                                <tr>
+                                    <td class="pe-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario is skipped">
+                                            <i class="fa fa-arrow-circle-right skipped-color me-2"></i>
+                                            Skipped
+                                        </p>
+                                    </td>
+                                    <td class="text-end">8.33 %</td>
+                                </tr>
+                                
+                                
+                                <tr>
+                                    <td class="pe-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenarios have multiple results">
+                                            <i class=" fas fa-blender various-color me-2"></i>
+                                            Various
+                                        </p>
+                                    </td>
+                                    <td class="text-end">16.67 %</td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex flex-grow-1 border p-2 col-sm m-2">
+    <div class="d-flex flex-column">
+        <div class="graph-title d-inline-flex border-bottom" data-bs-toggle="collapse" data-bs-target="#features-charts, #scenarios-charts,#metadata-properties">
+            <h2 class="d-flex align-text-bottom"> Scenarios </h2>
+            <li class="d-flex align-items-center ms-auto">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </li>
+        </div>
+        <div id="scenarios-charts" class="collapse show">
+            <div class="x_content container-fluid">
+                <table class="w-100 d-flex flex-column">
+                    <tr class="d-flex flex-row justify-content-center">
+                        <td class="me-3">
+                            <div class="chart-container">
+                                <canvas id="scenarios"></canvas>
+                            </div>
+                        </td>
+                        <td class="align-top">
+                            <table class="w-100">
+                                <tr>
+                                    <th class="me-2">
+                                        <div>
+                                            <p class="text-center">Status</p>
+                                        </div>   
+                                    </th> 
+                                    <th class="me-2">                                              
+                                        <div>
+                                            <p class="text-center">Progress</p>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td class="me-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario passed">
+                                            <i class="fa fa-check-circle passed-color me-2"></i>
+                                            Passed
+                                        </p>
+                                    </td>
+                                    <td class="text-end">50.00 %</td>
+                                </tr>
+                                <tr>
+                                    <td class="me-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario failed">
+                                            <i class="fa fa-exclamation-circle failed-color me-2"></i>
+                                            Failed
+                                        </p>
+                                    </td>
+                                    <td class="text-end">20.83 %</td>
+                                
+                                <tr>
+                                    <td class="me-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left"
+                                        title="Scenario has double step implementation and failed because of that.">
+                                            <i class="fa fa-bolt ambiguous-color me-2 ms-1"></i>
+                                            Ambiguous
+                                        </p>
+                                    </td>
+                                    <td class="text-end">4.17 %</td>
+                                </tr>
+                                
+                                
+                                <tr>
+                                    <td class="me-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario has no step implmentation.">
+                                            <i class="fa fa-question-circle undefined-color me-2"></i>
+                                            Not defined
+                                        </p>
+                                    </td>
+                                    <td class="text-end">8.33 %</td>
+                                </tr>
+                                
+                                </tr>
+                                
+                                <tr>
+                                    <td class="me-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario is pending">
+                                            <i class="fa fa-minus-circle pending-color me-2"></i>
+                                            Pending
+                                        </p>
+                                    </td>
+                                    <td class="text-end">8.33 %</td>
+                                </tr>
+                                
+                                
+                                <tr>
+                                    <td class="me-2">
+                                        <p class="mb-0" data-toggle="tooltip" data-placement="left" title="Scenario is skipped">
+                                            <i class="fa fa-arrow-circle-right skipped-color me-2"></i>
+                                            Skipped
+                                        </p>
+                                    </td>
+                                    <td class="text-end">8.33 %</td>
+                                </tr>
+                                
+                                
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        </div>
+
+        <div class="border p-0 mb-4 ms-4 me-4 ps-2 pe-2 pb-1">
+            <div class="graph-title flex flex-column row ms-2 me-2 pb-4">
+                <div class="flex flex-row border-bottom d-inline-flex" data-bs-toggle="collapse"
+                    data-bs-target="#features-overview">
+                    <h2 class="d-flex flex-column align-text-bottom mb-2 mt-2"> Features Overview</h2>
+                    <li class="d-flex align-items-center me-2 ms-auto">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </li>
+                </div>
+            </div>
+
+            <div id="features-overview" class="collapse show container-fluid">
+                <div class="x_panel mb-3 ps-2 pe-3 ms-3">
+    <table id="features-table" class="table-bordered display nowrap w-100" >
+        <thead>
+            <tr>
+                <th class="feature-name text-center">Feature Name</th>
+                <th class="feature-tags text-center"><i class="fa fa-tags text-center" title="Tags"></i></th>
+                <th class="text-center feature-status">Status</th>
+                <th class="feature-time text-center">Time</th>
+                
+                    
+                        <th class="feature-metadata text-center">browser</th>
+                    
+                        <th class="feature-metadata text-center">device</th>
+                    
+                        <th class="feature-metadata text-center">platform</th>
+                        
+                
+                <th class="scenarios-total text-center">Total</th>
+                <th class="scenarios-passed text-center">Passed</th>
+                <th class="scenarios-failed text-center">Failed</th>
+                <th class="scenarios-pending text-center">Pending</th>
+                <th class="scenarios-skipped text-center">Skipped</th>
+                <th class="scenarios-ambiguous text-center">Ambiguous</th>
+                <th class="scenarios-undefined text-center">Undefined</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <td> 10 </td>
+                <td></td>
+                <td></td>
+                <td>00:49:39.495</td>
+                
+                    
+                        <td></td>
+                    
+                        <td></td>
+                    
+                        <td></td>
+                        
+                    
+                <td>24</td>
+                <td>12</td>
+                
+                    <td class="failed-background text-light">5</td>
+                
+                <td class="pending-background text-light">2</td>
+                <td class="skipped-background text-light">2</td>
+                <td class="ambiguous-background text-light">1</td>
+                <td class="undefined-background text-light">2</td>
+            </tr>
+        </tfoot>
+
+        <tbody>
+        
+            <tr>
+                <td class="">
+                    <a class="" href="features/05-feature in status pending.html">Feature with all scenarios in status pending</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-fas fa-question-circle pending-color" data-bs-toggle="tooltip" data-placement="top" title="pending">
+                    </i>
+                    
+                </td>
+                <td>00:00:00.748</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                         
+                <td>1</td>
+                <td>0</td>
+                
+                    <td>0</td>
+                
+                
+                    <td class="pending-background text-light">1</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/05-feature in status skipped.html">Feature with all scenarios in status skipped</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-arrow-circle-right skipped-color" data-bs-toggle="tooltip" data-placement="top" title="skipped">
+                    </i>
+                    
+                </td>
+                <td>00:00:00.748</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="fab fa-chrome fa-1g" data-bs-toggle="tooltip" data-placement="top"
+                                title="Chrome 56">
+                            </i>
+                            <span>Chrome 56</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fas fa-mobile-alt fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Samsung S7">
+                            </i>
+                            <span>Samsung S7</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fab fa-android fa-1g" data-bs-toggle="tooltip" data-placement="top"
+                                title="Android 7.1">
+                            </i>
+                            <span>Android 7.1</span>
+                        </td>
+                    
+                         
+                <td>1</td>
+                <td>0</td>
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td class="skipped-background text-light">1</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/06-ambiguous-scenarios-specified.html">Feature with all scenarios in status ambigous ^'@#</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-fas fa-question-circle ambiguous-color" data-bs-toggle="tooltip" data-placement="top" title="ambiguous">
+                    </i>
+                    
+                </td>
+                <td>00:00:03.289</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                         
+                <td>1</td>
+                <td>0</td>
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td class="ambiguous-background text-light">1</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/feature-in-status-failed.html">Feature with all scenarios in status failed</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-exclamation-circle failed-color" data-bs-toggle="tooltip" data-placement="top" title="failed">
+                    </i>
+                    
+                </td>
+                <td>00:07:14.394</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                         
+                <td>1</td>
+                <td>0</td>
+                
+                    <td class="failed-background text-light">1</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/happy-flow-v1.html">Feature with all scenarios in status passed</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-check-circle passed-color" data-bs-toggle="tooltip" data-placement="top" title="passed">
+                    </i>
+                    
+                </td>
+                <td>00:26:08.655</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="fab fa-firefox fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Firefox 53">
+                            </i>
+                            <span>Firefox 53</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fas fa-desktop fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Virtual Machine">
+                            </i>
+                            <span>Virtual Machine</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fab fa-ubuntu fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Ubuntu 16.04">
+                            </i>
+                            <span>Ubuntu 16.04</span>
+                        </td>
+                    
+                         
+                <td>3</td>
+                <td>3</td>
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/scenarios-outline-v10.html">Feature with scenarios outline without feature</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-exclamation-circle failed-color" data-bs-toggle="tooltip" data-placement="top" title="failed">
+                    </i>
+                    
+                    <i class="fa fa-check-circle passed-color" data-bs-toggle="tooltip" data-placement="top" title="passed">
+                    </i>
+                    
+                </td>
+                <td>00:01:55.202</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                         
+                <td>5</td>
+                <td>2</td>
+                
+                    <td class="failed-background text-light">3</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/scenarios-outline-v11.html">Feature with scenarios outline</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                        <i class="fa fa-tags" data-bs-toggle="tooltip" data-placement="top"
+                        title="@example
+ @happy-flow
+ @angular">
+                            <span>@example
+ @happy-flow
+ @angular</span>
+                        </i>
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-fas fa-question-circle pending-color" data-bs-toggle="tooltip" data-placement="top" title="pending">
+                    </i>
+                    
+                    <i class="fa fa-arrow-circle-right skipped-color" data-bs-toggle="tooltip" data-placement="top" title="skipped">
+                    </i>
+                    
+                    <i class="fa fa-exclamation-circle failed-color" data-bs-toggle="tooltip" data-placement="top" title="failed">
+                    </i>
+                    
+                    <i class="fa fa-check-circle passed-color" data-bs-toggle="tooltip" data-placement="top" title="passed">
+                    </i>
+                    
+                </td>
+                <td>00:01:54.877</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="" data-bs-toggle="tooltip" data-placement="top"
+                                title="">
+                            </i>
+                            <span></span>
+                        </td>
+                    
+                         
+                <td>4</td>
+                <td>1</td>
+                
+                    <td class="failed-background text-light">1</td>
+                
+                
+                    <td class="pending-background text-light">1</td>
+                
+                
+                    <td class="skipped-background text-light">1</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/testing_embeddings.1494823257420.html">Feature with embeddings</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-check-circle passed-color" data-bs-toggle="tooltip" data-placement="top" title="passed">
+                    </i>
+                    
+                </td>
+                <td>00:12:21.274</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="fab fa-edge fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Edge 14">
+                            </i>
+                            <span>Edge 14</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fas fa-desktop fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Virtual Machine">
+                            </i>
+                            <span>Virtual Machine</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fab fa-windows fa-1g" data-bs-toggle="tooltip" data-placement="top"
+                                title="Windows 10">
+                            </i>
+                            <span>Windows 10</span>
+                        </td>
+                    
+                         
+                <td>6</td>
+                <td>6</td>
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/undefined-scenarios-specified-v1.html">Feature with all scenarios in status undefined</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                        <i class="fa fa-tag" data-bs-toggle="tooltip" data-placement="top"
+                        title="@undefined">
+                            <span>@undefined</span>
+                        </i>
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-fa fa-question-circle undefined-color" data-bs-toggle="tooltip" data-placement="top" title="undefined">
+                    </i>
+                    
+                </td>
+                <td>00:00:00.151</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="fab fa-safari fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Safari 10">
+                            </i>
+                            <span>Safari 10</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fab fa-apple fa-1g" data-bs-toggle="tooltip" data-placement="top"
+                                title="MacBook Pro">
+                            </i>
+                            <span>MacBook Pro</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fab fa-apple fa-1g" data-bs-toggle="tooltip" data-placement="top"
+                                title="OSX 10.12">
+                            </i>
+                            <span>OSX 10.12</span>
+                        </td>
+                    
+                         
+                <td>1</td>
+                <td>0</td>
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td class="undefined-background text-light">1</td>
+                
+            </tr>                                                 
+            
+            <tr>
+                <td class="">
+                    <a class="" href="features/undefined-scenarios-specified-v1a231949d-43b4-4132-b6b5-ff5da9a31923.html">Feature with all scenarios in status undefined</a>
+                </td>
+                <td class="text-center">
+                    
+                    
+                    
+                    
+                        <i class="fa fa-tag" data-bs-toggle="tooltip" data-placement="top"
+                        title="@undefined">
+                            <span>@undefined</span>
+                        </i>
+                    
+                    
+                </td>
+                <td class="text-center">
+                    
+                    <i class="fa fa-fa fa-question-circle undefined-color" data-bs-toggle="tooltip" data-placement="top" title="undefined">
+                    </i>
+                    
+                </td>
+                <td>00:00:00.151</td>
+                
+                    
+                        <td class="text-center">
+                            <i class="fab fa-safari fa-lg" data-bs-toggle="tooltip" data-placement="top"
+                                title="Safari 10">
+                            </i>
+                            <span>Safari 10</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fab fa-apple fa-1g" data-bs-toggle="tooltip" data-placement="top"
+                                title="MacBook Pro">
+                            </i>
+                            <span>MacBook Pro</span>
+                        </td>
+                    
+                        <td class="text-center">
+                            <i class="fab fa-apple fa-1g" data-bs-toggle="tooltip" data-placement="top"
+                                title="OSX 10.12">
+                            </i>
+                            <span>OSX 10.12</span>
+                        </td>
+                    
+                         
+                <td>1</td>
+                <td>0</td>
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td>0</td>
+                
+                
+                    <td class="undefined-background text-light">1</td>
+                
+            </tr>                                                 
+            
+        </tbody>
+    </table>
+</div>
+            </div>
+        </div>
+    </div>
+
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" 
+            integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.min.js" 
+            integrity="sha512-EKWWs1ZcA2ZY9lbLISPz8aGR2+L7JVYqBAYTq5AXgBkSjRSuQEGqWx8R1zAX16KdXPaCjOCaKE8MCpU0wcHlHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.bootstrap4.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.colVis.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.0.3/js/dataTables.scroller.js"></script>
+
+        <!-- Chart.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.1/chart.min.js" 
+            integrity="sha512-dCMdvmRC8BuFAgdVMPrm5MJauIcozqGY8krxgbXyUhVTvR3vzH0x2qW2nB4jFdeymins2ZubDv7osK1roNBKjg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0-rc.1/chartjs-plugin-datalabels.min.js"
+             integrity="sha512-+UYTD5L/bU1sgAfWA0ELK5RlQ811q8wZIocqI7+K0Lhh8yVdIoAMEs96wJAIbgFvzynPm36ZCXtkydxu1cs27w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+         
+    <!-- Custom -->
+
+    <script type="text/javascript">
+$(document).ready(function () {    
+    $(".graph-title").on("click",function(){
+        $(".graph-title li a i").toggleClass("fa-chevron-down");
+        $(".graph-title li a i").toggleClass("fa-chevron-up");
+        if( $(".table-scrollable").is(':visible') ){
+            $(".table-scrollable").hide();
+        }else{
+            $(".table-scrollable").show();
+        }
+    });
+
+    $('#features-table').dataTable({
+        dom: "<'row'<'col-md-2'l><'col-md-1'B><'col-md-6'><'col-md-3'f>>" +
+        "<'row'<'col-lg-12't>><'row'<'col-lg-6'i><'col-lg-6'p>>",
+        buttons: ['colvis'],
+        order: [[0, "asc"]],
+        lengthMenu: [[50, 100, 150, -1], [50, 100, 150, "All"]],
+        deferRender: true,
+        scrollCollapse: true,
+        scrollY: '92px',
+        scrollX: 1000,
+        initComplete: function(settings, json) {
+            if(true){
+                this.api().column( '.feature-time' ).visible( false );
+            }
+            if(false){
+                this.api().column( '.scenarios-pending' ).visible( false );
+            }
+            if(true){
+                this.api().column( '.feature-metadata' ).visible( false );
+            }
+            if(false) {
+                this.api().column( '.scenarios-skipped' ).visible( false );
+            }
+            if(false) {
+                this.api().column( '.scenarios-undefined' ).visible( false );
+            }
+            if(false) {
+                 this.api().column( '.scenarios-ambiguous' ).visible( false );
+            }
+            
+            $('#features-table').DataTable().columns.adjust().draw();
+            $('#features-table > tbody > tr > td:first-child').removeClass("dtr-control");
+        }
+    }); 
+    
+    var dataFeatures = {"datasets":[{"backgroundColor":["#228B22","#E74C3C","#FFD119","#3498DB","#b73122","#F39C12","#9b59b6"],"data":[2,1,1,1,1,2,2]}],"labels":["Passed","Failed","Pending","Skipped","Ambiguous","Undefined","Various"]}
+    var dataScenarios = {"datasets":[{"backgroundColor":["#228B22","#E74C3C","#FFD119","#3498DB","#b73122","#F39C12"],"data":[12,5,2,2,1,2]}],"labels":["Passed","Failed","Pending","Skipped","Ambiguous","Undefined"]}
+    var dataSteps = {"datasets":[{"backgroundColor":["#228B22","#E74C3C","#FFD119","#3498DB","#b73122","#F39C12"],"data":[69,5,2,31,1,2]}],"labels":["Passed","Failed","Pending","Skipped","Ambiguous","Undefined"]}
+    var chartsFunctions = {"document":{},"theme":"Dark"}
+    var graphOptions =() => ({
+            responsive: true,
+            elements: {},
+            legend: {
+                display: false
+            },
+            maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Chart',
+                    color: this.theme === 'Dark' ? '#73879c' : '#73879c',
+                    padding: {
+                        bottom: 20,
+                        top: 3
+                    }
+                },
+                legend: {
+                    display: false
+                },
+                datalabels: {
+                    color: '#ffffff',
+                    formatter: (value) => value ? `${value}` : ''
+                }
+            },
+        })
+    var writeValueInCenter =() => ({
+            id: 'paint_number_in_center',
+            beforeDraw: (chart) => {
+                const { width } = chart;
+                const { height } = chart;
+                const ctx = chart.ctx;
+                const textX = Math.round((width - ctx.measureText(chart.options.elements.text).width) / 2);
+                const textY = (height + chart.chartArea.top) / 2;
+                ctx.fillStyle = this.theme === 'Dark' ? '#73879c' : '#73879c';
+                ctx.fillText(chart.options.elements.text, textX, textY);
+                ctx.save();
+            }
+        })
+    var generateChart = (chartName, chartData, graphOptions, chartCenterValue) => {
+            const canvas = document.getElementById(chartName);
+            const ctx = canvas.getContext('2d');
+            (graphOptions.elements).text = chartCenterValue;
+            const chart = new Chart(ctx, {
+                data: chartData,
+                options: graphOptions,
+                plugins: [writeValueInCenter(), ChartDataLabels],
+                type: 'doughnut'
+            });
+            return chart;
+        }
+
+    const centerNumberFeatures = 12;
+    const featuresChart = generateChart( 'features', dataFeatures, graphOptions(), centerNumberFeatures );
+    const centerNumberScenarios = 24;
+    const scenariosChart = generateChart( 'scenarios', dataScenarios, graphOptions(), centerNumberScenarios);
+});
+
+</script>
+    <div class="created-by text-center">
+        <p>Created by yon cuadrado. Find me on:</p>
+        <a href="https://github.com/yon-cuadrado" target="_blank">
+            <i class="fab fa-github fa-2x ms-2"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/yon-cuadrado-blanco/" target="_blank">
+            <i class="fab fa-linkedin fa-2x"></i>
+        </a>
+    </div>
+</body>
+
+</html>

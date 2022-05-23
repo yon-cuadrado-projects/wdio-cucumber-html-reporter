@@ -1,5 +1,24 @@
 # wdio-cucumber-html-reporter
-A WDIO reporter that creates an html report using the plugin [cucumber-html-report-generator](https://github.com/yon-cuadrado-projects/cucumber-html-report-generator)
+A WDIO reporter that creates an html report using the plugin [cucumber-html-report-generator](https://github.com/yon-cuadrado-projects/cucumber-html-report-generator). This plugin has been created from the project [multiple-cucumber-html-reporter](https://github.com/wswebcreation/multiple-cucumber-html-reporter). The main differences with that project are these:
+
+- written with typescript
+- option to display Outline scenarios in a grouped way
+
+ ![Outline Scenarios](./docs/gifs/scenarios-outline.gif)
+- Option to store the reports in a mongodb database and access them from a web page
+- Dark and light themes
+
+
+![Snapshot - Features overview](./docs/images/features-with-dark-theme-and-report-metadata.jpeg "Snapshot - Browsers features overview")
+![Snapshot - Features overview](./docs/images/features-with-light-theme-and-report-metadata.jpeg "Snapshot - Browsers features overview")
+
+A sample with dark theme and report metadata can be found [here](./docs/report-with-dark-theme-and-report-metadata/index.html)
+and a sample with light theme and report metadata can be found [here](./docs/report-with-light-theme-and-report-metadata/index.html)
+
+And a sample with dark theme without report metadata can be found [here](./docs/report-with-dark-theme-without-report-metadata/index.html)
+and a sample with light theme without report metadata can be found [here](./docs/report-with-light-theme-and-without-report-metadata/index.html)
+
+
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 

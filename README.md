@@ -34,14 +34,6 @@ It will also add metadata about the running instance to the feature file and las
 ## Installation
 The easiest way is to keep `wdio-cucumber-html-reporter` as a devDependency in your `package.json`.
 
-```json
-{
-  "devDependencies": {
-    "wdio-cucumber-html-reporter": "0.0.29"
-  }
-}
-```
-
 You can simple do it by:
 
 ```bash

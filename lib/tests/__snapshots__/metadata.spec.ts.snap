@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`metadata determineMetadata should return app metadata with cjson:metadata 1`] = `
-Array [
-  Object {
+[
+  {
     "icon": "",
     "name": "browser",
     "value": "No metadata.browser.name available No metadata.browser.version available",
   },
-  Object {
+  {
     "name": "device",
     "value": "Device name not known",
   },
-  Object {
+  {
     "icon": "",
     "name": "platform",
     "value": "Platform name not known Version not known",
@@ -20,17 +20,17 @@ Array [
 `;
 
 exports[`metadata determineMetadata should return metadata with platform mac 1`] = `
-Array [
-  Object {
+[
+  {
     "icon": "",
     "name": "browser",
     "value": "No metadata.browser.name available No metadata.browser.version available",
   },
-  Object {
+  {
     "name": "device",
     "value": "Device name not known",
   },
-  Object {
+  {
     "icon": "fab fa-apple",
     "name": "platform",
     "value": "osx Version not known",
@@ -39,17 +39,17 @@ Array [
 `;
 
 exports[`metadata determineMetadata should return metadata with platform osx 1`] = `
-Array [
-  Object {
+[
+  {
     "icon": "",
     "name": "browser",
     "value": "No metadata.browser.name available No metadata.browser.version available",
   },
-  Object {
+  {
     "name": "device",
     "value": "Device name not known",
   },
-  Object {
+  {
     "icon": "fab fa-apple",
     "name": "platform",
     "value": "osx Version not known",
@@ -58,17 +58,17 @@ Array [
 `;
 
 exports[`metadata determineMetadata should return metadata with platfrom windows 1`] = `
-Array [
-  Object {
+[
+  {
     "icon": "",
     "name": "browser",
     "value": "No metadata.browser.name available No metadata.browser.version available",
   },
-  Object {
+  {
     "name": "device",
     "value": "Device name not known",
   },
-  Object {
+  {
     "icon": "fab fa-windows",
     "name": "platform",
     "value": "windows Version not known",
@@ -77,17 +77,17 @@ Array [
 `;
 
 exports[`metadata determineMetadata should return no metadata when there is none 1`] = `
-Array [
-  Object {
+[
+  {
     "icon": "",
     "name": "browser",
     "value": "No metadata.browser.name available No metadata.browser.version available",
   },
-  Object {
+  {
     "name": "device",
     "value": "Device name not known",
   },
-  Object {
+  {
     "icon": "",
     "name": "platform",
     "value": "Platform name not known Version not known",

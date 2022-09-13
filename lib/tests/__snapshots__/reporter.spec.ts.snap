@@ -1,33 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step when they have not been added 1`] = `
-Object {
-  "embeddings": Array [
-    Object {
+{
+  "embeddings": [
+    {
       "data": "foo",
       "mime_type": "type/string",
     },
   ],
   "keyword": "Given",
-  "result": Object {
+  "result": {
     "status": "pending",
   },
 }
 `;
 
 exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step which already has embeddings 1`] = `
-Object {
-  "arguments": Array [
-    Object {
-      "rows": Array [
-        Object {
-          "cells": Array [
+{
+  "arguments": [
+    {
+      "rows": [
+        {
+          "cells": [
             "Cucumber",
             "Cucumis sativus",
           ],
         },
-        Object {
-          "cells": Array [
+        {
+          "cells": [
             "Burr Gherkin",
             "Cucumis anguria",
           ],
@@ -35,8 +35,8 @@ Object {
       ],
     },
   ],
-  "embeddings": Array [
-    Object {
+  "embeddings": [
+    {
       "data": "data-2",
       "mime_type": "mime_type-2",
     },
@@ -46,18 +46,18 @@ Object {
 `;
 
 exports[`reporter cucumberJsAttachment should be able to add embeddings to a current step which already has embeddings 2`] = `
-Object {
-  "arguments": Array [
-    Object {
-      "rows": Array [
-        Object {
-          "cells": Array [
+{
+  "arguments": [
+    {
+      "rows": [
+        {
+          "cells": [
             "Cucumber",
             "Cucumis sativus",
           ],
         },
-        Object {
-          "cells": Array [
+        {
+          "cells": [
             "Burr Gherkin",
             "Cucumis anguria",
           ],
@@ -65,12 +65,12 @@ Object {
       ],
     },
   ],
-  "embeddings": Array [
-    Object {
+  "embeddings": [
+    {
       "data": "data-2",
       "mime_type": "mime_type-2",
     },
-    Object {
+    {
       "data": "data-2",
       "mime_type": "mime_type-2",
     },
@@ -80,7 +80,7 @@ Object {
 `;
 
 exports[`reporter on create should set the defaults only if the reportProperties option is provided 1`] = `
-Object {
+{
   "jsonFolder": "./tmp/jsons",
   "language": "en",
   "logFile": "tmp1/logFile.json",
@@ -89,7 +89,7 @@ Object {
 `;
 
 exports[`reporter on create should verify initial properties 1`] = `
-Object {
+{
   "jsonFolder": "./tmp/jsons",
   "language": "en",
   "logFile": "./.tmp/logFile.json",
@@ -97,26 +97,26 @@ Object {
 }
 `;
 
-exports[`reporter on create should verify initial properties 2`] = `Object {}`;
+exports[`reporter on create should verify initial properties 2`] = `{}`;
 
 exports[`reporter on create should verify initial properties 3`] = `
-Object {
-  "feature": Object {
-    "elements": Array [],
+{
+  "feature": {
+    "elements": [],
   },
 }
 `;
 
 exports[`reporter onHookStart should add a pending after step 1`] = `
-Object {
-  "arguments": Array [],
+{
+  "arguments": [],
   "keyword": "After",
   "line": "",
-  "match": Object {
+  "match": {
     "location": "can not be determined with webdriver.io",
   },
   "name": "",
-  "result": Object {
+  "result": {
     "duration": 0,
     "status": "passed",
   },
@@ -124,15 +124,15 @@ Object {
 `;
 
 exports[`reporter onHookStart should add a pending before step 1`] = `
-Object {
-  "arguments": Array [],
+{
+  "arguments": [],
   "keyword": "Before",
   "line": "",
-  "match": Object {
+  "match": {
     "location": "can not be determined with webdriver.io",
   },
   "name": "",
-  "result": Object {
+  "result": {
     "duration": 0,
     "status": "passed",
   },
@@ -140,24 +140,24 @@ Object {
 `;
 
 exports[`reporter onSuiteStart should add a scenario to the feature if the feature is already there 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "id": "test;test",
     "keyword": "Scenario",
     "name": "test",
-    "steps": Array [],
-    "tags": Array [],
+    "steps": [],
+    "tags": [],
     "type": undefined,
   },
 ]
 `;
 
-exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 1`] = `Object {}`;
+exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 1`] = `{}`;
 
 exports[`reporter onSuiteStart should add the CucumberJS feature object if it is not available 2`] = `
-Object {
-  "feature": Object {
+{
+  "feature": {
     "metadata": null,
   },
 }
